@@ -3,8 +3,10 @@
 # Title            : Mapas municipios España
 # Project          : T&E
 # Date of creation : 03/02/2025
+# Last update      : 19/02/2025
 
-# Author           : Eva Alonso Epelde (eva.alonso@bc3research.org)
+# Author 1         : Eva Alonso Epelde (eva.alonso@bc3research.org)
+# Author 2         : Mercè Amich Vidal (merce.amich@ehu.eus)
 # Institution      : Basque Centre for Climate Change (BC3)
 
 ###############################################################################
@@ -88,7 +90,7 @@ data <- data %>%
 ###############################################################################
 
 # ************************************************************
-# 3. Create maps
+# 3. Create static maps
 # ************************************************************
 
 ### Map 1: Censo de conductores per cápita
@@ -378,3 +380,235 @@ for (t in tipo_distintivo) {
          scale = 2, dpi = 800)
   
 }
+
+
+###############################################################################
+rm(list = setdiff(ls(), c("data", "path"))) # Clean environment
+gc()                                        # Free unused local memory
+###############################################################################
+
+# ************************************************************
+# 3. Create dynamic maps
+# ************************************************************
+
+# [1] PREPARE SPATIAL FILES & MERGE THEM WITH "data" ----
+
+# [a] Download shapefiles via "mapSpain" ----
+
+ccaa       <- esp_get_ccaa(epsg = "4326")
+provincias <- esp_get_prov(epsg = "4326")
+municipios <- esp_get_munic()
+
+# [b] Match names in "data" and "shapefiles" ----
+# Needed to merge our "data" with the spatial polygons in the .sf
+
+## [i] Comunidades Autónomas----
+
+### Identify differences in both objects
+diff1 <- setdiff(unique(data$Comunidad.Autónoma), unique(ccaa$ine.ccaa.name))
+diff2 <- setdiff(unique(ccaa$ine.ccaa.name), unique(data$Comunidad.Autónoma))  
+
+diff1 # Elements in data$ not present in $ccaa
+diff2 # Elements in ccaa$ not present in data$
+
+
+### Recode data$
+data$Comunidad.Autónoma <- recode(data$Comunidad.Autónoma,
+        # OLD NAMES:                    # NEW NAMES:
+        "Castilla-La Mancha"           = "Castilla - La Mancha",
+        "Asturias (Principado de)"     = "Asturias, Principado de",
+        "Balears (Illes)"              = "Balears, Illes",
+        "Madrid (Comunidad de)"        = "Madrid, Comunidad de",
+        "Murcia (Región de)"           = "Murcia, Región de",
+        "Navarra (Comunidad Foral de)" = "Navarra, Comunidad Foral de",
+        "Rioja (La)"                   = "Rioja, La"
+)
+
+### Check consistency
+diff1 <- setdiff(unique(data$Comunidad.Autónoma), unique(ccaa$ine.ccaa.name))
+diff2 <- setdiff(unique(ccaa$ine.ccaa.name), unique(data$Comunidad.Autónoma))  
+
+diff1 # Elements in data$ not present in $ccaa
+diff2 # Elements in ccaa$ not present in data$
+
+## [ii] Províncias----
+
+### Identify differences in both objects
+diff1 <- setdiff(unique(data$Provincia), unique(provincias$ine.provname))
+diff2 <- setdiff(unique(provincias$ine.prov.name), unique(data$Provincia))  
+
+diff1 # Elements in data$ not present in $provincias
+diff2 # Elements in provincias$ not present in data$
+
+### Recode data$
+data$Provincia <- recode(data$Provincia,
+        # OLD NAMES:        # NEW NAMES:
+        "Balears (Illes)" = "Balears, Illes",
+        "Palmas (Las)"    = "Palmas, Las",
+        "Coruña (A)"      = "Coruña, A",
+        "Rioja (La)"      = "Rioja, La"
+)
+
+### Check consistency
+diff1 <- setdiff(unique(data$Provincia), unique(provincias$ine.prov.name))
+diff2 <- setdiff(unique(provincias$ine.prov.name), unique(data$Provincia))  
+
+diff1 # Elements in data$ not present in $ccaa
+diff2 # Elements in ccaa$ not present in data$
+
+## [iii] Municipios ####
+
+# España tiene 8131 municipios según el INE y "data" tiene 8133 observaciones
+
+# Identificamos qué observaciones difieren comparando el LAU_CODE
+diff1 <- setdiff(unique(data$LAU_CODE), unique(municipios$LAU_CODE))
+diff2 <- setdiff(unique(municipios$LAU_CODE), unique(data$LAU_CODE))
+
+diff1 # Códigos en data$LAU_CODE que no están en municipios$LAU_CODE
+diff2 # Códigos en municipios$LAU_CODE que no están en data$LAU_CODE
+
+# diff1 devuelve los códigos "01000" y "36012" como distintos. 
+# diff2 devuelve el código "48916" como distinto
+
+# Relativo a diff1, los inspeccionamos:
+data$Municipio[data$LAU_CODE == "01000"] # "Alava ( municipio sin especificar)"
+data$Municipio[data$LAU_CODE == "36012"] # "Cerdedo-Cotobade"
+
+# En el primer caso, eliminamos la observación
+# Serán vehículos sin municipio especificado en el sistema central DGT (vía @Oscar Pulido T&E 14.02.25)
+
+data <- subset(data, LAU_CODE != "01000")
+
+# El segundo caso refiere a un municipio de Pontevedra de nueva creación (2016)
+# Es la fusión de Cerdedo [[36012]] y Cotobade [[36902]] (antiguos)
+# El "shapefile" ("municipios") tiene la geometría para el municipio fusionado
+# Habrá que fusionar la información de los viejos en las métricas de "data"
+
+### Identify differences in both objects
+diff1 <- setdiff(unique(data$Municipio), unique(municipios$name))
+diff2 <- setdiff(unique(municipios$name), unique(data$Municipio))  
+
+diff1 # Elements in data$ not present in $ccaa (159 diferencias)
+diff2 # Elements in ccaa$ not present in data$ (159 diferencias)
+
+
+### Recode municipios$
+
+# Si inspeccionamos "diff1" y "diff2" vemos que muchas diferencias de las 160 son debidas a que haya o no un espacio entre la barra horizontal separadora (/) en los municipios con denominación bilingüe. Añadimos el espacio para harmonizar los nombres en "data$" con "municipios$"
+
+data$Municipio <- gsub("/", " / ", data$Municipio)
+
+# Check how many differences are left
+diff1 <- setdiff(unique(data$Municipio), unique(municipios$name))
+diff2 <- setdiff(unique(municipios$name), unique(data$Municipio))  
+
+diff1 # Elements in data$ not present in $municipios (38 diferencias)
+diff2 # Elements in municipios$ not present in data$ (38 diferencias)
+
+# Dos tipos de cambios a recodificar:
+# a) Nombres franquistas en "municipios" (GISCO Eurostat)
+# b) Discrepancias tipográficas (p.ej, "A Coruña" y "Coruña A")
+
+# Tiene que hacerse manualmente, y los cambios tienen que hacerse en municipios$:
+
+municipios$name <- recode(municipios$name,  
+    # OLD NAMES:                  # NEW NAMES:
+    "Albánchez"                        = "Albanchez",
+    "Almazora"                         = "Almassora",
+    "Algimia de Alfara"                = "Algímia d'Alfara",
+    "Benlloch"                         = "Benlloc",
+    "Brunyola"                         = "Brunyola i Sant Martí Sapresa",
+    "Cañiza, A"                        = "A Cañiza",
+    "Calonge"                          = "Calonge i Sant Antoni",
+    "Castellón de la Plana / Castelló de la Plana" = "Castelló de la Plana",
+    "Coruña, A"                        = "A Coruña",
+    "Ejeme"                            = "Éjeme",
+    "Estrada, A"                       = "A Estrada",
+    "Genovés"                          = "Genovés, el",
+    "Guarda, A"                        = "A Guarda",
+    "Guadiana del Caudillo"            = "Guadiana",
+    "Gudiña, A"                        = "A Gudiña",
+    "Herbés"                           = "Herbers",
+    "Íllar"                            = "Illar", 
+    "Iglesuela, La"                    = "Iglesuela del Tiétar, La",
+    "Jerez del Marquesado"             = "Jérez del Marquesado",
+    "Jarque"                           = "Jarque de Moncayo",
+    "Laracha, A"                       = "A Laracha",
+    "Lezáun"                           = "Lezaun",
+    "Lumbreras"                        = "Lumbreras de Cameros",
+    "Medina-Sidonia"                   = "Medina Sidonia",
+    "Mezquita, A"                      = "A Mezquita",
+    "Mendigorría"                      = "Mendigorria",
+    "Náquera"                          = "Nàquera / Náquera",
+    "Palma de Mallorca"                = "Palma",
+    "Pobra do Caramiñal, A"            = "A Pobra do Caramiñal",
+    "Pontenova, A"                     = "A Pontenova",
+    "Pradales"                         = "Carabias", # En 2016 cambia el nombre
+    "Rótova"                           = "Ròtova",
+    "Ribera Baja / Erribera Beitia"    = "Erriberabeitia",
+    "Teixeira, A"                      = "A Teixeira",
+    "Valencia"                         = "València",
+    "Veiga, A"                         = "A Veiga",
+    "Villanueva de Castellón"          = "Castelló", # Castelló de la Ribera
+    "Villafranca del Cid / Vilafranca" = "Vilafranca / Villafranca del Cid"
+)
+
+# Nota 1: En 2016, "Pradales" cambia su nombre a "Carabias"
+# Nota 2, comprobado:
+# "Villanueva de Castellón" es "Castelló" (de la Ribera) [Código INE / LAU: 46257]
+# "Castellón de la Plana" es Castelló de la Plana [Código INE / LAU: 12040]
+
+# Check how many differences are left (previous: 38)
+diff1 <- setdiff(unique(data$Municipio), unique(municipios$name))
+diff2 <- setdiff(unique(municipios$name), unique(data$Municipio))  
+
+diff1 # Elements in data$ not present in $municipios (12 diferencias)
+diff2 # Elements in municipios$ not present in data$ (11 diferencias)
+
+# Fusionamos datos de Cerdedo y Cotobade:
+data_fusionada <- data %>%
+  filter(LAU_CODE %in% c(36012, 36902)) %>%
+  group_by(Municipio) %>%
+  summarise(
+    LAU_CODE                     = as.numeric(36902),
+    Municipio                    = "Cerdedo-Cotobade",
+    Provincia                    = first(Provincia),
+    Comunidad.Autónoma           = first(Comunidad.Autónoma),
+    `ES.RURAL?`                  = first(`ES.RURAL?`),                         
+    Población.Total              = sum(Población.Total, na.rm = TRUE),
+    Población.Hombres            = sum(Población.Hombres, na.rm = TRUE),
+    Población.Mujeres            = sum(Población.Mujeres, na.rm = TRUE),
+    Censo.Conductores            = sum(Censo.Conductores, na.rm = TRUE),
+    parque_pc                    = sum(parque_pc, na.rm = TRUE),
+    parque_ciclomotores_pc       = sum(parque_ciclomotores_pc, na.rm = TRUE),
+    parque_motocicletas_pc       = sum(parque_motocicletas_pc, na.rm = TRUE),
+    parque_turismos_pc           = sum(parque_turismos_pc, na.rm = TRUE),
+    parque_furgonetas_pc         = sum(parque_furgonetas_pc, na.rm = TRUE),
+    parque_camiones_pc           = sum(parque_camiones_pc, na.rm = TRUE),
+    antiguedad_tot               = mean(antiguedad_tot, na.rm = TRUE),
+    antiguedad_ciclomotores      = mean(antiguedad_ciclomotores, na.rm = TRUE),
+    antiguedad_motocicletas      = mean(antiguedad_motocicletas, na.rm = TRUE),
+    antiguedad_turismos          = mean(antiguedad_turismos, na.rm = TRUE),
+    antiguedad_furgonetas        = mean(antiguedad_furgonetas, na.rm = TRUE),
+    antiguedad_camiones          = mean(antiguedad_camiones, na.rm = TRUE),
+    distintivo_B                 = sum(distintivo_B, na.rm = TRUE),
+    distintivo_C                 = sum(distintivo_C, na.rm = TRUE),
+    distintivo_ECO               = sum(distintivo_ECO, na.rm = TRUE),
+    distintivo_0                 = sum(distintivo_0, na.rm = TRUE),
+    sin_distintivo               = sum(sin_distintivo, na.rm = TRUE),
+    Total.Campañas               = sum(Total.Campañas, na.rm = TRUE)
+  )
+
+# Ensure "Código INE" and "LAU_CODE" are numeric
+data$LAU_CODE       <- as.numeric(data$LAU_CODE)
+municipios$LAU_CODE <- as.numeric(municipios$LAU_CODE)
+
+# Remove both rows with Código INE 36012 and 36902
+data <- data %>%
+  filter(!LAU_CODE %in% c(36012, 36902))
+
+# Add the new row (data_fusionada)
+data <- data %>%
+  bind_rows(data_fusionada)
+
+
