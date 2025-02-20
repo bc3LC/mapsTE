@@ -93,17 +93,18 @@ data <- data %>%
 # 3. Create static maps
 # ************************************************************
 
-### Map 1: Censo de conductores per cápita
-
-# Create municipality data
+### Preliminar step: create municipality data
 muni <- esp_get_munic()
 
-# Create a variable to merge
+# Create a variable to merge 
 data <- data %>%
   mutate(LAU_CODE = Código.INE)
 
 # Merge dataframes
 data_muni <- merge(data, muni, all = TRUE)
+
+
+### Map 1: Censo de conductores per cápita
 
 # Create map: municipalities
 esp_get_munic() %>% ggplot() + geom_sf() + theme_minimal()
@@ -610,5 +611,6 @@ data <- data %>%
 # Add the new row (data_fusionada)
 data <- data %>%
   bind_rows(data_fusionada)
+
 
 
