@@ -23,24 +23,35 @@ Sys.setenv(LANG = "en")
 
 # Install and load any required R-package
 packages_loaded <- installed.packages()
-packages_needed <- c ( "dplyr"      ,
-                       "stringr"    ,
-                       "sqldf"      ,
-                       "reshape2"   ,
-                       "readxl"     ,
-                       "openxlsx"   ,
-                       "here"       ,
-                       "data.table" ,
-                       "spatstat"   ,
-                       "ggplot2"    ,
-                       "showtext"   ,
-                       "extrafont"  ,
-                       "fastDummies",
-                       "cluster"    ,
-                       "fpc"        ,
-                       "purrr"      ,
-                       "dendextend" ,
-                       "mapSpain")
+packages_needed <- c("dplyr"      ,
+                     "stringr"    ,
+                     "sqldf"      ,
+                     "reshape2"   ,
+                     "readxl"     , 
+                     "openxlsx"   ,
+                     "here"       ,
+                     "data.table" ,
+                     "spatstat"   ,
+                     "ggplot2"    , 
+                     "showtext"   ,
+                     "extrafont"  ,
+                     "fastDummies",
+                     "cluster"    ,
+                     "fpc"        , 
+                     "purrr"      ,
+                     "dendextend" ,
+                     "mapSpain"   ,
+                     "leaflet"    ,
+                     "geojsonio"  ,
+                     "htmltools"  ,
+                     "plotly"     ,
+                     "tidyverse"  ,
+                     "sf"         ,
+                     "stringi"    , 
+                     "RColorBrewer",
+                     "scales"
+                     )
+
 
 for ( p in packages_needed) {
   if (!p %in% row.names(packages_loaded)) install.packages(p)
@@ -103,36 +114,42 @@ data <- data %>%
 # Merge dataframes
 data_muni <- merge(data, muni, all = TRUE)
 
+# ************************************************************
 
 ### Map 1: Censo de conductores per cápita
 
 # Create map: municipalities
 esp_get_munic() %>% ggplot() + geom_sf() + theme_minimal()
 
-# Define breaks and corresponding colors
-breaks <- c(0, 0.2, 0.4, 0.6, 0.8, 100)
+# Define breaks and colors
+breaks <- c(0, 0.3, 0.5, 0.6, 0.7, max(data$censo_pc, na.rm = TRUE)) 
 
-labels <- c("<0.2"   , 
-            "0.2-0.4", 
-            "0.4-0.6", 
-            "0.6-0.8",
-            ">0.8"   )
+labels <- c("<0.3"   , 
+            "0.3-0.5", 
+            "0.5-0.6", 
+            "0.6-0.7",
+            ">0.7"   )
 
-colors <- c("<0.2"    = "#ccf4f4", 
-            "0.2-0.4" = "#6fe2e2",
-            "0.4-0.6" = "#2bd2d2",
-            "0.6-0.8" = "#22a8a8", 
-            ">0.8"    = "#104f4f")
+colors <- c("<0.3"    = "#ccf4f4", 
+            "0.3-0.5" = "#6fe2e2",
+            "0.5-0.6" = "#2bd2d2",
+            "0.6-0.7" = "#22a8a8", 
+            ">0.7"    = "#104f4f")
 
-data_muni$censo_pca <- cut(data_muni$censo_pc   , 
-                           breaks = breaks      , 
-                           labels = labels      , 
+# Apply
+data_muni$censo_pca <- cut(data_muni$censo_pc, 
+                           breaks = breaks, 
+                           labels = labels, 
                            include.lowest = TRUE)
+
 
 # Create map
 pl <- ggplot() +
-  geom_sf(data = data_muni, aes(geometry= geometry , fill = censo_pca)) +    # color map by regions
-  scale_fill_manual(values = colors, name = "Censo de conductores per cápita") +  # set colors and breaks
+  geom_sf(data = data_muni, 
+          aes(geometry = geometry , 
+              fill     = censo_pca)) +
+  scale_fill_manual(values = colors, 
+                    name   = "Censo de conductores per cápita") + 
   theme_classic() +
   theme(legend.position = "bottom")
 
@@ -142,37 +159,46 @@ setwd(path_o)
 
 # Save map
 ggsave(filename = "map_censo_pc.png",
-       plot = pl, width = 20, height = 20, units = 'cm',
-       scale = 2, dpi = 800)
+       plot   = pl, 
+       width  = 20, 
+       height = 20, 
+       units  = 'cm',
+       scale  = 2, 
+       dpi    = 800)
 
 
 
 ### Map 2: Parque total per cápita
 
-# Define breaks and corresponding colors
-breaks <- c(0, 0.75, 1.5, 2.25, 3, 100)
+# Adjusted breaks
+breaks <- c(0, 0.75, 1, 1.25, 1.5, 3) 
 
 labels <- c("<0.75"   , 
-            "0.75-1.5", 
-            "1.5-2.25", 
-            "2.25-3"  ,
-            ">3"      )
+            "0.75-1"  , 
+            "1-1.25"  , 
+            "1.25-1.5",
+            ">1.5"    )
 
-colors <- c("<0.75"    = "#ccf4f4", 
-            "0.75-1.5" = "#6fe2e2",
-            "1.5-2.25" = "#2bd2d2",
-            "2.25-3"   = "#22a8a8", 
-            ">3"       = "#104f4f")
+# Maintain the color scheme
+colors <- c("<0.75"   = "#ccf4f4", 
+            "0.75-1"  = "#6fe2e2",
+            "1-1.25"  = "#2bd2d2",
+            "1.25-1.5"= "#22a8a8", 
+            ">1.5"    = "#104f4f")
 
+# Apply cut
 data_muni$parque_pca <- cut(data_muni$parque_pc   , 
-                           breaks = breaks      , 
-                           labels = labels      , 
-                           include.lowest = TRUE)
+                            breaks = breaks      , 
+                            labels = labels      , 
+                            include.lowest = TRUE)
 
 # Create map 
 pl <- ggplot() +
-  geom_sf(data = data_muni, aes(geometry= geometry , fill = parque_pca)) +    # color map by regions
-  scale_fill_manual(values = colors, name = "Parque total de vehículos per cápita") +  # set colors and breaks
+  geom_sf(data = data_muni, 
+          aes(geometry = geometry , 
+              fill     = parque_pca)) +
+  scale_fill_manual(values = colors, 
+                    name   = "Parque total de vehículos per cápita") +
   theme_classic() +
   theme(legend.position = "bottom")
 
@@ -182,80 +208,95 @@ setwd(path_o)
 
 # Save map
 ggsave(filename = "map_parque_pc.png",
-       plot = pl, width = 20, height = 20, units = 'cm',
-       scale = 2, dpi = 800)
+       plot   = pl, 
+       width  = 20, 
+       height = 20, 
+       units  = 'cm',
+       scale  = 2, 
+       dpi    = 800)
 
 
 
 ### Map 3: Parque per cápita por tipología
 
-# Define "tipoligias"
+# Define "tipologias"
 parque_tipologias <- c("parque_ciclomotores_pc",
                        "parque_motocicletas_pc",
-                       "parque_turismos_pc"    ,
-                       "parque_furgonetas_pc"  ,
+                       "parque_turismos_pc",
+                       "parque_furgonetas_pc",
                        "parque_camiones_pc")
 
-# Define breaks and corresponding colors
-breaks <- c(0, 0.5, 1, 1.5, 2, 100)
+# Lista de breaks personalizados por categoría
+breaks_list <- list(
+  "parque_ciclomotores_pc"    = c(0, 0.03, 0.05, 0.1, 0.5, 2),
+  "parque_motocicletas_pc"    = c(0, 0.05, 0.1,  0.5, 1,   6),
+  "parque_turismos_pc"        = c(0, 0.1,  0.3,  0.6, 1,   81.5778),
+  "parque_furgonetas_pc"      = c(0, 0.05, 0.1,  0.2, 0.5, 16),
+  "parque_camiones_pc"        = c(0, 0.05, 0.1,  0.2, 0.5, 10)
+)
 
-labels <- c("<0.5"  , 
-            "0.5-1" , 
-            "1-1.5" , 
-            "1.5-2" ,
-            ">2"    )
+# Colores para la leyenda
+colors <- c("#ccf4f4", 
+            "#6fe2e2", 
+            "#2bd2d2", 
+            "#22a8a8", 
+            "#104f4f")
 
-colors <- c("<0.5"  = "#ccf4f4", 
-            "0.5-1" = "#6fe2e2",
-            "1-1.5" = "#2bd2d2",
-            "1.5-2" = "#22a8a8", 
-            ">2"    = "#104f4f")
-
-
-# Loop to create maps for different categories
+# Loop para crear los mapas para las distintas categorías
 for (t in parque_tipologias) {
   
-  # Create legend breaks
+  # Extraer los cortes para la variable
+  breaks <- breaks_list[[t]]
+  
+  # Generar etiquetas dinámicamente a partir de los breaks
+  labels <- paste0("[", head(breaks, -1), "-", tail(breaks, -1), "]")  
+  
+  # Crear nueva columna
   data_muni[[paste0(t, "a")]] <- cut(data_muni[[t]], 
-                                    breaks = breaks      , 
-                                    labels = labels      , 
-                                    include.lowest = TRUE)
- 
-   # define tipology
+                                     breaks = breaks, 
+                                     labels = labels, 
+                                     include.lowest = TRUE)
+  
+  # Nombre de la categoría
   tip <- strsplit(t, "_")[[1]][2]  
   
-  # Create map and save
+  # Crear mapa
   pl <- ggplot() +
-    geom_sf(data = data_muni, aes(geometry= geometry , fill = .data[[paste0(t, "a")]])) +    # color map by regions
-    scale_fill_manual(values = colors, name = paste0("Parque de ", tip, " per cápita")) +  # set colors and breaks
+    geom_sf(data = data_muni, 
+            aes(geometry = geometry , 
+                fill = .data[[paste0(t, "a")]])) +  
+    scale_fill_manual(values = setNames(colors, labels), 
+                      name = paste0("Parque de ", tip, " per cápita")) +  
     theme_classic() +
     theme(legend.position = "bottom")
   
-  ggsave(filename = paste0("map_parque_",tip,"_pc.png"),
-         plot = pl, width = 20, height = 20, units = 'cm',
-         scale = 2, dpi = 800)
-  
+  # Guardar mapa
+  ggsave(filename = paste0("map_parque_", tip, "_pc.png"),
+         plot   = pl, 
+         width  = 20, 
+         height = 20, 
+         units  = 'cm',
+         scale  = 2, 
+         dpi    = 800)
 }
-
 
 
 ### Map 4: Antiguedad media del parque
 
 # Define breaks and corresponding colors
-breaks <- c(0, 5, 10, 15, 20, 100)
+breaks <- c(0, 12, 14, 15, 16, 25)
 
-labels <- c("<5"       , 
-            "5-10"     , 
-            "10-15"    , 
-            "15-20"    ,
-            ">20"      )
+labels <- c("<12"   , 
+            "12-14" , 
+            "14-15" , 
+            "15-16" ,
+            ">16"   )
 
-colors <- c("<5"    = "#ccf4f4", 
-            "5-10"  = "#6fe2e2",
-            "10-15" = "#2bd2d2",
-            "15-20" = "#22a8a8", 
-            ">20"   = "#104f4f")
-
+colors <- c("<12"   = "#ccf4f4", 
+            "12-14" = "#6fe2e2",
+            "14-15" = "#2bd2d2",
+            "15-16" = "#22a8a8", 
+            ">16"   = "#104f4f")
 
 data_muni$antiguedad_total <- cut(data_muni$antiguedad_tot , 
                                   breaks = breaks          , 
@@ -264,8 +305,11 @@ data_muni$antiguedad_total <- cut(data_muni$antiguedad_tot ,
 
 # Create map 
 pl <- ggplot() +
-  geom_sf(data = data_muni, aes(geometry= geometry , fill = antiguedad_total)) +    # color map by regions
-  scale_fill_manual(values = colors, name = "Antigüedad media del parque") +  # set colors and breaks
+  geom_sf(data         = data_muni, 
+          aes(geometry = geometry , 
+              fill     = antiguedad_total)) +    
+  scale_fill_manual(values = colors, 
+                    name   = "Antigüedad media del parque") +
   theme_classic() +
   theme(legend.position = "bottom")
 
@@ -275,58 +319,76 @@ setwd(path_o)
 
 # Save map
 ggsave(filename = "map_antiguedad.png",
-       plot = pl, width = 20, height = 20, units = 'cm',
-       scale = 2, dpi = 800)
+       plot   = pl, 
+       width  = 20, 
+       height = 20, 
+       units  = 'cm',
+       scale  = 2, 
+       dpi    = 800)
 
 
 
 ### Map 5: Antiguedad media del parque por tipología
 
-# Define "tipoligias"
+# Define "tipologias"
 antiguedad_tipologias <- c("antiguedad_ciclomotores",
                            "antiguedad_motocicletas",
-                           "antiguedad_turismos"    ,
-                           "antiguedad_furgonetas"  ,
-                           "antiguedad_camiones"    )
+                           "antiguedad_turismos",
+                           "antiguedad_furgonetas",
+                           "antiguedad_camiones")
 
-# Define breaks and corresponding colors
-breaks <- c(0, 5, 10, 15, 20, 100)
+# Lista de breaks personalizados por categoría
+breaks_list <- list(
+  "antiguedad_ciclomotores"    = c(0, 5, 10, 15, 20, 25),
+  "antiguedad_motocicletas"    = c(0, 5, 10, 15, 20, 25),
+  "antiguedad_turismos"       = c(0, 5, 10, 15, 20, 25),
+  "antiguedad_furgonetas"     = c(0, 5, 10, 15, 20, 25),
+  "antiguedad_camiones"       = c(0, 5, 10, 15, 20, 25)
+)
 
-labels <- c("<5"       , 
-            "5-10"     , 
-            "10-15"    , 
-            "15-20"    ,
-            ">20"      )
+# Colores para la leyenda
+colors <- c("#ccf4f4", 
+            "#6fe2e2", 
+            "#2bd2d2", 
+            "#22a8a8", 
+            "#104f4f")
 
-colors <- c("<5"    = "#ccf4f4", 
-            "5-10"  = "#6fe2e2",
-            "10-15" = "#2bd2d2",
-            "15-20" = "#22a8a8", 
-            ">20"   = "#104f4f")
-
-# Loop to create maps for different categories
+# Loop para crear los mapas para las distintas categorías
 for (t in antiguedad_tipologias) {
   
-  # Create legend breaks
+  # Extraer los cortes para la variable
+  breaks <- breaks_list[[t]]
+  
+  # Generar etiquetas dinámicamente a partir de los breaks
+  labels <- paste0("[", head(breaks, -1), "-", tail(breaks, -1), "]")  
+  
+  # Crear nueva columna
   data_muni[[paste0(t, "a")]] <- cut(data_muni[[t]], 
-                                     breaks = breaks      , 
-                                     labels = labels      , 
+                                     breaks = breaks, 
+                                     labels = labels, 
                                      include.lowest = TRUE)
   
-  # define tipology
+  # Nombre de la categoría
   tip <- strsplit(t, "_")[[1]][2]  
   
-  # Create map and save
+  # Crear mapa
   pl <- ggplot() +
-    geom_sf(data = data_muni, aes(geometry= geometry , fill = .data[[paste0(t, "a")]])) +    # color map by regions
-    scale_fill_manual(values = colors, name = paste0("Antigüedad media de ", tip)) +  # set colors and breaks
+    geom_sf(data = data_muni, 
+            aes(geometry = geometry , 
+                fill = .data[[paste0(t, "a")]])) +  
+    scale_fill_manual(values = setNames(colors, labels), 
+                      name = paste0("Antigüedad media de ", tip)) +  
     theme_classic() +
     theme(legend.position = "bottom")
   
-  ggsave(filename = paste0("map_antiguedad_",tip,".png"),
-         plot = pl, width = 20, height = 20, units = 'cm',
-         scale = 2, dpi = 800)
-  
+  # Guardar mapa
+  ggsave(filename = paste0("map_antiguedad_", tip, ".png"),
+         plot   = pl, 
+         width  = 20, 
+         height = 20, 
+         units  = 'cm',
+         scale  = 2, 
+         dpi    = 800)
 }
 
 
@@ -334,65 +396,88 @@ for (t in antiguedad_tipologias) {
 ### Map 6: % de vehículos por etiquetas
 
 # Define "tipos de distintivos"
-tipo_distintivo <- c("distintivo_B"   ,
-                     "distintivo_C"   ,
-                     "distintivo_ECO" ,
-                     "distintivo_0"   ,
-                     "sin_distintivo" )
+tipo_distintivo <- c("distintivo_B",
+                     "distintivo_C",
+                     "distintivo_ECO",
+                     "distintivo_0",
+                     "sin_distintivo")
 
-# Define breaks and corresponding colors
-breaks <- c(0, 20, 40, 60, 80, 100)
+# Lista de breaks personalizados
+breaks_list <- list(
+  "distintivo_B"   = c(0, 10, 20, 30, 40, 50, 75),
+  "distintivo_C"   = c(0, 10, 20, 30, 40, 50, 86),
+  "distintivo_ECO" = c(0, 1, 2, 3, 4, 33),        
+  "distintivo_0"   = c(0, 0.5, 1, 2, 5, 15),      
+  "sin_distintivo" = c(0, 10, 20, 30, 50, 100)    
+)
 
-labels <- c("<20"      , 
-            "20-40"    , 
-            "40-60"    , 
-            "60-80"    ,
-            ">80"      )
+# Colores que se usarán en la leyenda
+colors_list <- list(
+  "distintivo_B"   = c("#ccf4f4", "#6fe2e2", "#2bd2d2", "#22a8a8", "#104f4f", "#004949"),
+  "distintivo_C"   = c("#ccf4f4", "#6fe2e2", "#2bd2d2", "#22a8a8", "#104f4f", "#004949"),
+  "distintivo_ECO" = c("#ccf4f4", "#6fe2e2", "#2bd2d2", "#22a8a8", "#104f4f"),
+  "distintivo_0"   = c("#ccf4f4", "#6fe2e2", "#2bd2d2", "#22a8a8", "#104f4f"),
+  "sin_distintivo" = c("#ccf4f4", "#6fe2e2", "#2bd2d2", "#22a8a8", "#104f4f")
+)
 
-colors <- c("<20"   = "#ccf4f4", 
-            "20-40" = "#6fe2e2",
-            "40-60" = "#2bd2d2",
-            "60-80" = "#22a8a8", 
-            ">80"   = "#104f4f")
-
-# Loop to create maps for different categories
+# Loop para generar los mapas
 for (t in tipo_distintivo) {
   
-  # Create legend breaks
+  # Extraer los cortes para la variable
+  breaks <- breaks_list[[t]]
+  
+  # Generar etiquetas dinámicamente a partir de los breaks
+  labels <- paste0("[", head(breaks, -1), "-", tail(breaks, -1), "]")  
+  
+  # Crear nueva columna para la variable categorizada
   data_muni[[paste0(t, "a")]] <- cut(data_muni[[t]], 
-                                     breaks = breaks      , 
-                                     labels = labels      , 
+                                     breaks = breaks, 
+                                     labels = labels, 
                                      include.lowest = TRUE)
   
-  # Create map
+  # Nombre de la categoría (tipo de distintivo)
+  tip <- strsplit(t, "_")[[1]][2]  
+  
+  # Extraer los colores correspondientes para este tipo de distintivo
+  colors <- colors_list[[t]]
+  
+  # Crear mapa con ggplot
   pl <- ggplot() +
-    geom_sf(data = data_muni, aes(geometry= geometry , fill = .data[[paste0(t, "a")]])) +    # color map by regions
-    scale_fill_manual(values = colors, name = paste0("% de vehículos con ", t)) +  # set colors and breaks
+    geom_sf(data         = data_muni, 
+            aes(geometry = geometry , 
+                fill     = .data[[paste0(t, "a")]])) +  
+    scale_fill_manual(values = setNames(colors, labels), 
+                      name   = paste0("% de vehículos con ", tip)) +  
     theme_classic() +
     theme(legend.position = "bottom")
   
-  # Define path
-  path_o <- paste0(path,"/mapas_etiquetas")
+  # Definir la ruta
+  path_o <- paste0(path, "/mapas_etiquetas")
   setwd(path_o)
   
-  # Save map
-  ggsave(filename = paste0("map_",t,".png"),
-         plot = pl, width = 20, height = 20, units = 'cm',
-         scale = 2, dpi = 800)
-  
+  # Guardar mapa
+  ggsave(filename = paste0("map_", t, ".png"),
+         plot   = pl, 
+         width  = 20, 
+         height = 20, 
+         units  = 'cm',
+         scale  = 2, 
+         dpi    = 800)
 }
 
 
 ###############################################################################
+
 rm(list = setdiff(ls(), c("data", "path"))) # Clean environment
 gc()                                        # Free unused local memory
+
 ###############################################################################
 
 # ************************************************************
 # 3. Create dynamic maps
 # ************************************************************
 
-# [1] PREPARE SPATIAL FILES & MERGE THEM WITH "data" ----
+# [1] Prepare spatial files $ merge them with "data"  ----
 
 # [a] Download shapefiles via "mapSpain" ----
 
@@ -611,6 +696,26 @@ data <- data %>%
 # Add the new row (data_fusionada)
 data <- data %>%
   bind_rows(data_fusionada)
+remove("data_fusionada")
 
+# [c] Crear métricas autonómicas y provinciales ----
 
+## Autonómicas
+ccaa_data <- data %>%
+  group_by(Comunidad.Autónoma) %>%
+  summarise(across(where(is.numeric), \(x) mean(x, na.rm = TRUE)))
 
+## Provinciales
+
+provincias_data <- data %>%
+  group_by(Provincia) %>%
+  summarise(across(where(is.numeric), \(x) mean(x, na.rm = TRUE)))
+
+## Rename "data" (ensure consistency with 3 admin. levels)
+municipios_data <- data
+remove("data")
+
+###############################################################################
+###############################################################################
+
+# NEXT STEP (TO ADD): LOOP TO CREATE DYNAMIC MAPS FOR EACH VAR. x3 ADMIN. LEVELS
