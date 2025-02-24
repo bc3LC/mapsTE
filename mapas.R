@@ -716,6 +716,165 @@ municipios_data <- data
 remove("data")
 
 ###############################################################################
-###############################################################################
 
-# NEXT STEP (TO ADD): LOOP TO CREATE DYNAMIC MAPS FOR EACH VAR. x3 ADMIN. LEVELS
+# Set working domain at the start again 
+setwd(path)
+
+# Lista de variables
+variables <- c("censo_pc", "parque_pc", "parque_ciclomotores_pc", "parque_motocicletas_pc", 
+               "parque_turismos_pc", "parque_furgonetas_pc", "parque_camiones_pc", 
+               "antiguedad_tot", "antiguedad_ciclomotores", "antiguedad_motocicletas",
+               "antiguedad_turismos", "antiguedad_furgonetas", "antiguedad_camiones",
+               "distintivo_B", "distintivo_C", "distintivo_ECO", "sin_distintivo", "distintivo_0"
+)
+
+# Plot titles
+titulos <- c(
+  "censo_pc"                     = "Vehículos censados por cápita",
+  "parque_pc"                    = "Parque de vehículos por cápita",
+  "parque_ciclomotores_pc"       = "Parque de ciclomotores por cápita",
+  "parque_motocicletas_pc"       = "Parque de motocicletas por cápita",
+  "parque_turismos_pc"           = "Parque de turismos por cápita",
+  "parque_furgonetas_pc"         = "Parque de furgonetas por cápita",
+  "parque_camiones_pc"           = "Parque de camiones por cápita",
+  "antiguedad_tot"               = "Antigüedad media del parque total",
+  "antiguedad_ciclomotores"      = "Antigüedad media del parque de ciclomotores",
+  "antiguedad_motocicletas"      = "Antigüedad media del parque de motocicletas",
+  "antiguedad_turismos"          = "Antigüedad media del parque de turismos",
+  "antiguedad_furgonetas"        = "Antigüedad media del parque de furgonetas",
+  "antiguedad_camiones"          = "Antigüedad media del parque de camiones",
+  "distintivo_B"                 = "Prevalencia de vehículos con Distintivo B",
+  "distintivo_C"                 = "Prevalencia de vehículos con Distintivo C",
+  "distintivo_ECO"               = "Prevalencia de vehículos con Distintivo ECO",
+  "sin_distintivo"               = "Prevalencia de vehículos sin distintivo",
+  "distintivo_0"                 = "Prevalencia de vehículos con Distintivo 0"
+)
+
+# Función para obtener los breaks con comprobación (to avoid unique breaks)
+get_breaks <- function(data, n_bins = 6) {
+  
+  # Calcular los percentiles
+  breaks <- quantile(data, probs = seq(0, 1, length.out = n_bins), na.rm = TRUE)
+  
+  # Si los breaks no son únicos, usar 'pretty' para generar los intervalos
+  if (length(unique(breaks)) != length(breaks)) {
+    breaks <- pretty(data, n_bins)
+  }
+  
+  return(breaks)
+}
+
+# Check si "mapas_dinamicos" existe, if not create it
+if (!dir.exists("mapas_dinamicos")) {
+  dir.create("mapas_dinamicos")
+}
+
+# Loop para cada variable
+for (var in variables) {
+  
+  # Loop por niveles administrativos
+  for (nivel in c("ccaa", "prov", "muni")) {
+    
+    # Determinar si la variable es porcentaje o años
+    unidad <- ifelse(grepl("antiguedad", var), " años", 
+                     ifelse(grepl("censo", var), "", " %"))
+    
+    # Formatear título
+    var_titulo <- gsub("_", " ", var)
+    var_titulo <- paste0(toupper(substr(var_titulo, 1, 1)), substr(var_titulo, 2, nchar(var_titulo)))
+    
+    # Seleccionar y agregar datos según el nivel
+    if (nivel == "ccaa") {
+      data_nivel <- municipios_data %>%
+        group_by(Comunidad.Autónoma) %>%
+        summarise(across(where(is.numeric), ~ mean(.x, na.rm = TRUE)))
+      
+      merge_nivel <- ccaa %>% left_join(data_nivel, 
+                                        by = c("ine.ccaa.name" = "Comunidad.Autónoma"))
+      
+    } else if (nivel == "prov") {
+      data_nivel <- municipios_data %>%
+        group_by(Provincia) %>%
+        summarise(across(where(is.numeric), ~ mean(.x, na.rm = TRUE)))
+      
+      merge_nivel <- provincias %>% left_join(data_nivel, 
+                                              by = c("ine.prov.name" = "Provincia"))
+    } else {
+      merge_nivel <- municipios %>% left_join(municipios_data, 
+                                              by = c("name" = "Municipio"))
+    }
+    
+    # Obtener los breaks
+    breaks_nivel <- get_breaks(merge_nivel[[var]], n_bins = 6)
+    
+    # Crear paleta de colores
+    pal <- colorBin(palette = "YlOrRd", 
+                    domain  = merge_nivel[[var]], 
+                    bins    = breaks_nivel)
+    
+    # Crear etiquetas con manejo de NA
+    labels <- sprintf("<strong>%s</strong><br/>%s: %s%s", 
+                      merge_nivel[[if (nivel == "ccaa") "ine.ccaa.name" else if (nivel == "prov") "ine.prov.name" else "name"]],
+                      titulos[[var]], 
+                      ifelse(is.na(merge_nivel[[var]]), "No disponible", round(merge_nivel[[var]], 2)), unidad) %>%
+      lapply(HTML)
+    
+    # Crear el mapa
+    map_nivel <- leaflet(merge_nivel) %>%
+      addProviderTiles("CartoDB.Positron") %>%
+      addPolygons(
+        fillColor   = ~pal(merge_nivel[[var]]),
+        fillOpacity = 0.7,
+        weight      = 1,
+        opacity     = 1,
+        color       = "white",
+        dashArray   = "3",
+        
+        popup       = ~paste("<strong>", 
+                             merge_nivel[[if (nivel == "ccaa") "ine.ccaa.name" else if (nivel == "prov") "ine.prov.name" else "name"]], 
+                             "</strong><br>",
+                             titulos[[var]], ": ", 
+                             ifelse(is.na(merge_nivel[[var]]), "No disponible", round(merge_nivel[[var]], 2)), unidad),
+        
+        highlight   = highlightOptions(weight = 5, color = "#666", fillOpacity = 0.7, bringToFront = TRUE),
+        
+        label       = labels,
+        labelOptions = labelOptions(style = list("font-weight" = "normal", 
+                                                 padding       = "3px 8px"),
+                                    textsize  = "15px", 
+                                    direction = "auto")
+      ) %>%
+      addLegend(pal      = pal, 
+                values   = ~merge_nivel[[var]], 
+                opacity  = 0.7, 
+                title    = titulos[[var]], 
+                position = "bottomright") %>%
+      
+      # Añadir líneas de separación entre la península y las Islas Canarias
+      ## Línea horizontal 
+      addPolylines(
+        lat = c(36.5, 36.5), 
+        lng = c(-12.5, -8),  
+        color = "grey", 
+        weight = 1,
+        dashArray = "2",
+        opacity = 1
+      ) %>%
+      ## Línea diagonal
+      addPolylines(
+        lat = c(36.5, 35),  
+        lng = c(-8, -7),
+        color = "grey", 
+        weight = 1,
+        dashArray = "2",
+        opacity = 1
+      ) %>%
+      
+      addControl(html = paste0("<div style='font-size: 20px; font-weight: bold; color: #333; background-color: white; padding: 5px; border-radius: 7px;'>",
+                               titulos[[var]], "</div>"), position = "topright")
+    
+    # Guardar el mapa
+    saveWidget(map_nivel, file = paste0("mapas_dinamicos/map_", nivel, "_", var, ".html"), selfcontained = TRUE)
+  }
+}
+
