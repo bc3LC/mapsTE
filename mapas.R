@@ -5,8 +5,8 @@
 # Date of creation : 03/02/2025
 # Last update      : 19/02/2025
 
-# Author 1         : Eva Alonso Epelde (eva.alonso@bc3research.org)
-# Author 2         : Mercè Amich Vidal (merce.amich@ehu.eus)
+# Author 1         : Eva Alonso Epelde (eva.alonso@ bc3research.org)
+# Author 2         : Mercè Amich Vidal (merce.amich@ ehu.eus)
 # Institution      : Basque Centre for Climate Change (BC3)
 
 ###############################################################################
