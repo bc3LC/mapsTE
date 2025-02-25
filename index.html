@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapas Interactivos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: 0;
+        }
+        .menu {
+            width: 100%;
+            background: #333;
+            padding: 10px;
+            color: white;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .menu button {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .menu button:hover {
+            background: #666;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+        .expand {
+            margin-top: 10px;
+            padding: 8px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1000;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu">
+        <div>
+            <h3>Seleccionar Mapa</h3>
+            <button onclick="cargarMapa('distintivo')">Distintivos</button>
+            <button onclick="cargarMapa('antiguedad')">Antigüedad</button>
+            <button onclick="cargarMapa('parque_pc')">Parque por Cápita</button>
+            <button onclick="cargarMapa('censo_pc')">Censo de Vehículos por Cápita</button>
+        </div>
+
+        <div id="nivelesContainer" style="display: none;">
+            <h3>Seleccionar Nivel Administrativo</h3>
+            <button onclick="cargarNivel('ccaa')">Comunidad Autónoma</button>
+            <button onclick="cargarNivel('provincia')">Provincia</button>
+            <button onclick="cargarNivel('municipio')">Municipio</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <iframe id="mapaFrame" src=""></iframe>
+        <button class="expand" onclick="expandirMapa()">🔍 Expandir</button>
+    </div>
+
+    <script>
+        let tipoMapa = '';
+        let nivelAdministrativo = 'ccaa'; // Por defecto es Comunidad Autónoma
+
+        function cargarMapa(tipo) {
+            tipoMapa = tipo;
+            document.getElementById("nivelesContainer").style.display = 'block'; // Mostrar los botones para seleccionar el nivel administrativo
+            actualizarMapa(); // Actualizar el mapa después de elegir el tipo
+        }
+
+        function cargarNivel(nivel) {
+            nivelAdministrativo = nivel;
+            actualizarMapa(); // Actualizar el mapa con el nivel seleccionado
+        }
+
+        function actualizarMapa() {
+            const url = obtenerUrlMapa(tipoMapa, nivelAdministrativo);
+            document.getElementById("mapaFrame").src = url;
+        }
+
+        function obtenerUrlMapa(mapa, nivel) {
+            const baseUrl = "https://bc3lc.github.io/mapsTE/mapas_dinamicos/";
+
+            // Mapas de Distintivos
+            if (mapa === 'distintivo') {
+                if (nivel === 'ccaa') return `${baseUrl}map_ccaa_distintivo_0.html`;
+                if (nivel === 'provincia') return `${baseUrl}map_prov_distintivo_0.html`;
+                if (nivel === 'municipio') return `${baseUrl}map_muni_distintivo_0.html`;
+            }
+
+            // Mapas de Antigüedad
+            if (mapa === 'antiguedad') {
+                if (nivel === 'ccaa') return `${baseUrl}map_ccaa_antiguedad_camiones.html`;
+                if (nivel === 'provincia') return `${baseUrl}map_prov_antiguedad_camiones.html`;
+                if (nivel === 'municipio') return `${baseUrl}map_muni_antiguedad_camiones.html`;
+            }
+
+            // Mapas de Parque por Cápita
+            if (mapa === 'parque_pc') {
+                if (nivel === 'ccaa') return `${baseUrl}map_ccaa_parque_camiones_pc.html`;
+                if (nivel === 'provincia') return `${baseUrl}map_prov_parque_camiones_pc.html`;
+                if (nivel === 'municipio') return `${baseUrl}map_muni_parque_camiones_pc.html`;
+            }
+
+            // Mapas de Censo por Cápita
+            if (mapa === 'censo_pc') {
+                if (nivel === 'ccaa') return `${baseUrl}map_ccaa_censo_pc.html`;
+                if (nivel === 'provincia') return `${baseUrl}map_prov_censo_pc.html`;
+                if (nivel === 'municipio') return `${baseUrl}map_muni_censo_pc.html`;
+            }
+
+            return ''; // Si no hay mapa válido
+        }
+
+        function expandirMapa() {
+            let iframe = document.getElementById("mapaFrame");
+            if (iframe.classList.contains("fullscreen")) {
+                iframe.classList.remove("fullscreen");
+            } else {
+                iframe.classList.add("fullscreen");
+            }
+        }
+    </script>
+
+</body>
+</html>

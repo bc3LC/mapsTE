@@ -1,9 +1,9 @@
 # Mapas estáticos
 
-- **Mapas antigüedad**: [Enlace](https://github.com/bc3LC/mapsTE/tree/main/mapas_antiguedad)
-- **Mapas censo**: [Enlace](https://github.com/bc3LC/mapsTE/tree/main/mapas_censo)
-- **Mapas etiquetas**: [Enlace](https://github.com/bc3LC/mapsTE/tree/main/mapas_etiquetas)
-- **Mapas parque** [Enlace](https://github.com/bc3LC/mapsTE/tree/main/mapas_parque)
+- **Mapas antigüedad**: [Enlace](https://github.com/bc3LC/mapsTE/tree/main/mapas_estaticos/mapas_antiguedad)
+- **Mapas censo**: [Enlace](https://github.com/bc3LC/mapsTE/tree/main/mapas_estaticos/mapas_censo)
+- **Mapas etiquetas**: [Enlace](https://github.com/bc3LC/mapsTE/tree/main/mapas_estaticos/mapas_etiquetas)
+- **Mapas parque** [Enlace](https://github.com/bc3LC/mapsTE/tree/main/mapas_estaticos/mapas_parque)
 
 
 # Mapas dinámicos
