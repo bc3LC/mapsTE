@@ -764,23 +764,18 @@ titulos <- c(
   "distintivo_0"                 = "Prevalencia de vehículos con Distintivo 0"
 )
 
-# Función para obtener los breaks con comprobación (to avoid unique breaks)
-get_breaks <- function(data, n_bins = 6) {
+# Modificar la leyenda para el último nivel
+custom_labels <- function(breaks, unidad) {
+  # Redondear los breaks a 2 cifras decimales
+  breaks_rounded <- round(breaks, 2)
   
-  # Calcular los percentiles
-  breaks <- quantile(data, probs = seq(0, 1, length.out = n_bins), na.rm = TRUE)
+  # Crear las etiquetas con la unidad apropiada, excepto el último caso
+  labels <- paste0(breaks_rounded[-length(breaks_rounded)], " ", unidad, " - ", breaks_rounded[-1], " ", unidad)
   
-  # Si los breaks no son únicos, usar 'pretty' para generar los intervalos
-  if (length(unique(breaks)) != length(breaks)) {
-    breaks <- pretty(data, n_bins)
-  }
+  # Modificar la última etiqueta (la de "y más grandes")
+  labels[length(labels)] <- paste0(breaks_rounded[length(breaks_rounded) - 1], " ", unidad, " o más")
   
-  return(breaks)
-}
-
-# Check si "mapas_dinamicos" existe, if not create it
-if (!dir.exists("mapas_dinamicos")) {
-  dir.create("mapas_dinamicos")
+  return(labels)
 }
 
 # Loop para cada variable
@@ -861,14 +856,23 @@ for (var in variables) {
                                     textsize  = "15px", 
                                     direction = "auto")
       ) %>%
-      addLegend(pal      = pal, 
-                values   = ~merge_nivel[[var]], 
-                opacity  = 0.7, 
-                title    = titulos[[var]], 
-                position = "bottomright") %>%
+      # Añadir la leyenda con labFormat
+      addLegend(
+        pal      = pal, 
+        values   = ~merge_nivel[[var]], 
+        opacity  = 0.7, 
+        title    = titulos[[var]], 
+        position = "bottomright",
+        labels   = custom_labels(breaks_nivel, unidad), 
+        labFormat = labelFormat(
+          digits = 2,             
+          prefix = "",            
+          suffix = unidad,            
+          big.mark = ","
+        )
+      ) %>%
       
       # Añadir líneas de separación entre la península y las Islas Canarias
-      ## Línea horizontal 
       addPolylines(
         lat = c(36.5, 36.5), 
         lng = c(-12.5, -8),  
@@ -877,7 +881,6 @@ for (var in variables) {
         dashArray = "2",
         opacity = 1
       ) %>%
-      ## Línea diagonal
       addPolylines(
         lat = c(36.5, 35),  
         lng = c(-8, -7),
@@ -886,7 +889,6 @@ for (var in variables) {
         dashArray = "2",
         opacity = 1
       ) %>%
-      
       addControl(html = paste0("<div style='font-size: 20px; font-weight: bold; color: #333; background-color: white; padding: 5px; border-radius: 7px;'>",
                                titulos[[var]], "</div>"), position = "topright")
     
@@ -896,5 +898,3 @@ for (var in variables) {
                selfcontained = TRUE)
   }
 }
-
-
