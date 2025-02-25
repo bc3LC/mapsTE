@@ -71,17 +71,13 @@
     <div class="menu">
         <div>
             <h3>Seleccionar Mapa</h3>
-            <button onclick="cargarMapa('distintivo_0')">Distintivo 0</button>
-            <button onclick="cargarMapa('distintivo_ECO')">Distintivo ECO</button>
-            <button onclick="cargarMapa('distintivo_B')">Distintivo B</button>
-            <button onclick="cargarMapa('distintivo_C')">Distintivo C</button>
-            <button onclick="cargarMapa('sin_distintivo')">Sin Distintivo</button>
+            <button onclick="cargarMapa('distintivo')">Distintivos</button>
             <button onclick="cargarMapa('antiguedad')">Antigüedad</button>
             <button onclick="cargarMapa('parque_pc')">Parque por Cápita</button>
             <button onclick="cargarMapa('censo_pc')">Censo de Vehículos por Cápita</button>
         </div>
-        
-        <div>
+
+        <div id="nivelesContainer" style="display: none;">
             <h3>Seleccionar Nivel Administrativo</h3>
             <button onclick="cargarNivel('ccaa')">Comunidad Autónoma</button>
             <button onclick="cargarNivel('provincia')">Provincia</button>
@@ -98,14 +94,15 @@
         let tipoMapa = '';
         let nivelAdministrativo = 'ccaa'; // Por defecto es Comunidad Autónoma
 
-        function cargarMapa(mapa) {
-            tipoMapa = mapa;
-            actualizarMapa();
+        function cargarMapa(tipo) {
+            tipoMapa = tipo;
+            document.getElementById("nivelesContainer").style.display = 'block'; // Mostrar los botones para seleccionar el nivel administrativo
+            actualizarMapa(); // Actualizar el mapa después de elegir el tipo
         }
 
         function cargarNivel(nivel) {
             nivelAdministrativo = nivel;
-            actualizarMapa();
+            actualizarMapa(); // Actualizar el mapa con el nivel seleccionado
         }
 
         function actualizarMapa() {
@@ -117,11 +114,11 @@
             const baseUrl = "https://bc3lc.github.io/mapsTE/mapas_dinamicos/";
 
             // Mapas de Distintivos
-            if (mapa === 'distintivo_0') return `${baseUrl}map_${nivel}_distintivo_0.html`;
-            if (mapa === 'distintivo_ECO') return `${baseUrl}map_${nivel}_distintivo_ECO.html`;
-            if (mapa === 'distintivo_B') return `${baseUrl}map_${nivel}_distintivo_B.html`;
-            if (mapa === 'distintivo_C') return `${baseUrl}map_${nivel}_distintivo_C.html`;
-            if (mapa === 'sin_distintivo') return `${baseUrl}map_${nivel}_sin_distintivo.html`;
+            if (mapa === 'distintivo') {
+                if (nivel === 'ccaa') return `${baseUrl}map_ccaa_distintivo_0.html`;
+                if (nivel === 'provincia') return `${baseUrl}map_prov_distintivo_0.html`;
+                if (nivel === 'municipio') return `${baseUrl}map_muni_distintivo_0.html`;
+            }
 
             // Mapas de Antigüedad
             if (mapa === 'antiguedad') {
