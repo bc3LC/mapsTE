@@ -734,6 +734,8 @@ remove("data")
 # Set working domain at the start again 
 setwd(path)
 
+
+
 # Lista de variables
 variables <- c("censo_pc", "parque_pc", "parque_ciclomotores_pc", "parque_motocicletas_pc", 
                "parque_turismos_pc", "parque_furgonetas_pc", "parque_camiones_pc", 
@@ -764,20 +766,40 @@ titulos <- c(
   "distintivo_0"                 = "Prevalencia de vehículos con Distintivo 0"
 )
 
+# Función para obtener los breaks con comprobación (to avoid unique breaks)
+get_breaks <- function(data, n_bins = 6) {
+  
+  # Calcular los percentiles
+  breaks <- quantile(data, probs = seq(0, 1, length.out = n_bins), na.rm = TRUE)
+  
+  # Si los breaks no son únicos, usar 'pretty' para generar los intervalos
+  if (length(unique(breaks)) != length(breaks)) {
+    breaks <- pretty(data, n_bins)
+  }
+  
+  return(breaks)
+}
+
 # Modificar la leyenda para el último nivel
-custom_labels <- function(breaks, unidad) {
+custom_labels <- function(breaks) {
   # Redondear los breaks a 2 cifras decimales
   breaks_rounded <- round(breaks, 2)
   
-  # Crear las etiquetas con la unidad apropiada, excepto el último caso
-  labels <- paste0(breaks_rounded[-length(breaks_rounded)], " ", unidad, " - ", breaks_rounded[-1], " ", unidad)
+  # Crear las etiquetas con "%", excepto el último caso
+  labels <- paste0(breaks_rounded[-length(breaks_rounded)], " - ", breaks_rounded[-1], "%")
   
   # Modificar la última etiqueta (la de "y más grandes")
-  labels[length(labels)] <- paste0(breaks_rounded[length(breaks_rounded) - 1], " ", unidad, " o más")
+  labels[length(labels)] <- paste0(breaks_rounded[length(breaks_rounded) - 1], " o más")
   
   return(labels)
 }
 
+
+
+# Check si "mapas_dinamicos" existe, if not create it
+if (!dir.exists("mapas_dinamicos")) {
+  dir.create("mapas_dinamicos")
+}
 # Loop para cada variable
 for (var in variables) {
   
