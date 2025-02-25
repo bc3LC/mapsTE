@@ -49,7 +49,8 @@ packages_needed <- c("dplyr"      ,
                      "sf"         ,
                      "stringi"    , 
                      "RColorBrewer",
-                     "scales"
+                     "scales"     ,
+                     "htmlwidgets"
                      )
 
 
@@ -116,7 +117,21 @@ data_muni <- merge(data, muni, all = TRUE)
 
 # ************************************************************
 
+# Definir directorio principal
+main_path <- paste0(path, "/mapas_estaticos")
+dir.create(main_path, recursive = TRUE, showWarnings = FALSE)
+
+# Función para subdirectorios y setwd()
+create_subdir <- function(subfolder) {
+  sub_path <- file.path(main_path, subfolder)
+  dir.create(sub_path, recursive = TRUE, showWarnings = FALSE)
+  setwd(sub_path)
+}
+
 ### Map 1: Censo de conductores per cápita
+
+# Crear subdirectorio
+create_subdir("mapas_censo")
 
 # Create map: municipalities
 esp_get_munic() %>% ggplot() + geom_sf() + theme_minimal()
@@ -153,10 +168,6 @@ pl <- ggplot() +
   theme_classic() +
   theme(legend.position = "bottom")
 
-# Define path
-path_o <- paste0(path,"/mapas_censo")
-setwd(path_o)
-
 # Save map
 ggsave(filename = "map_censo_pc.png",
        plot   = pl, 
@@ -167,8 +178,10 @@ ggsave(filename = "map_censo_pc.png",
        dpi    = 800)
 
 
-
 ### Map 2: Parque total per cápita
+
+# Crear subdirectorio
+create_subdir("mapas_parque")
 
 # Adjusted breaks
 breaks <- c(0, 0.75, 1, 1.25, 1.5, 3) 
@@ -202,9 +215,6 @@ pl <- ggplot() +
   theme_classic() +
   theme(legend.position = "bottom")
 
-# Define path
-path_o <- paste0(path,"/mapas_parque")
-setwd(path_o)
 
 # Save map
 ggsave(filename = "map_parque_pc.png",
@@ -242,9 +252,12 @@ colors <- c("#ccf4f4",
             "#22a8a8", 
             "#104f4f")
 
+# Crear subdirectorio
+create_subdir("mapas_parque")
+
 # Loop para crear los mapas para las distintas categorías
 for (t in parque_tipologias) {
-  
+
   # Extraer los cortes para la variable
   breaks <- breaks_list[[t]]
   
@@ -283,6 +296,9 @@ for (t in parque_tipologias) {
 
 ### Map 4: Antiguedad media del parque
 
+# Crear subdirectorio
+create_subdir("mapas_antiguedad")
+
 # Define breaks and corresponding colors
 breaks <- c(0, 12, 14, 15, 16, 25)
 
@@ -313,10 +329,6 @@ pl <- ggplot() +
   theme_classic() +
   theme(legend.position = "bottom")
 
-# Define path
-path_o <- paste0(path,"/mapas_antiguedad")
-setwd(path_o)
-
 # Save map
 ggsave(filename = "map_antiguedad.png",
        plot   = pl, 
@@ -329,6 +341,9 @@ ggsave(filename = "map_antiguedad.png",
 
 
 ### Map 5: Antiguedad media del parque por tipología
+
+# Crear subdirectorio
+create_subdir("mapas_antiguedad")
 
 # Define "tipologias"
 antiguedad_tipologias <- c("antiguedad_ciclomotores",
@@ -395,6 +410,9 @@ for (t in antiguedad_tipologias) {
 
 ### Map 6: % de vehículos por etiquetas
 
+# Crear subdirectorio
+create_subdir("mapas_etiquetas")
+
 # Define "tipos de distintivos"
 tipo_distintivo <- c("distintivo_B",
                      "distintivo_C",
@@ -450,10 +468,6 @@ for (t in tipo_distintivo) {
                       name   = paste0("% de vehículos con ", tip)) +  
     theme_classic() +
     theme(legend.position = "bottom")
-  
-  # Definir la ruta
-  path_o <- paste0(path, "/mapas_etiquetas")
-  setwd(path_o)
   
   # Guardar mapa
   ggsave(filename = paste0("map_", t, ".png"),
@@ -825,7 +839,7 @@ for (var in variables) {
       addPolygons(
         fillColor   = ~pal(merge_nivel[[var]]),
         fillOpacity = 0.7,
-        weight      = 1,
+        weight      = 0.5,
         opacity     = 1,
         color       = "white",
         dashArray   = "3",
@@ -836,7 +850,10 @@ for (var in variables) {
                              titulos[[var]], ": ", 
                              ifelse(is.na(merge_nivel[[var]]), "No disponible", round(merge_nivel[[var]], 2)), unidad),
         
-        highlight   = highlightOptions(weight = 5, color = "#666", fillOpacity = 0.7, bringToFront = TRUE),
+        highlight   = highlightOptions(weight       = 5, 
+                                       color        = "#666", 
+                                       fillOpacity  = 0.7, 
+                                       bringToFront = TRUE),
         
         label       = labels,
         labelOptions = labelOptions(style = list("font-weight" = "normal", 
@@ -874,7 +891,10 @@ for (var in variables) {
                                titulos[[var]], "</div>"), position = "topright")
     
     # Guardar el mapa
-    saveWidget(map_nivel, file = paste0("mapas_dinamicos/map_", nivel, "_", var, ".html"), selfcontained = TRUE)
+    saveWidget(map_nivel, 
+               file = paste0("mapas_dinamicos/map_", nivel, "_", var, ".html"), 
+               selfcontained = TRUE)
   }
 }
+
 
