@@ -170,112 +170,111 @@
                 actualizarBotones(); // Actualizar el estilo de los botones
             }
     
-           // Función para obtener la URL del mapa dependiendo de las selecciones
-    function obtenerUrlMapa() {
-        const baseUrl = "https://bc3lc.github.io/mapsTE/mapas_dinamicos/";
-    
-        if (tipoMapa === 'distintivos') {
-            if (submapaSeleccionado === '0') {
-                return `${baseUrl}map_${nivelAdministrativo}_distintivo_0.html`;
-            }
-            if (submapaSeleccionado === 'eco') {
-                return `${baseUrl}map_${nivelAdministrativo}_distintivo_ECO.html`;
-            }
-            if (submapaSeleccionado === 'b') {
-                return `${baseUrl}map_${nivelAdministrativo}_distintivo_B.html`;
-            }
-            if (submapaSeleccionado === 'c') {
-                return `${baseUrl}map_${nivelAdministrativo}_distintivo_C.html`;
-            }
-            if (submapaSeleccionado === 'sin') {
-                return `${baseUrl}map_${nivelAdministrativo}_sin_distintivo.html`;
-            }
+// Función para obtener la URL del mapa dependiendo de las selecciones
+function obtenerUrlMapa() {
+    const baseUrl = "https://bc3lc.github.io/mapsTE/mapas_dinamicos/";
+
+    if (tipoMapa === 'distintivos') {
+        if (submapaSeleccionado === '0') {
+            return `${baseUrl}map_${nivelAdministrativo}_distintivo_0.html`;
         }
-    
-        if (tipoMapa === 'antiguedad') {
-            if (submapaSeleccionado === 'camiones') {
-                return `${baseUrl}map_${nivelAdministrativo}_antiguedad_camiones.html`;
-            }
-            if (submapaSeleccionado === 'ciclomotores') {
-                return `${baseUrl}map_${nivelAdministrativo}_antiguedad_ciclomotores.html`;
-            }
-            if (submapaSeleccionado === 'furgonetas') {
-                return `${baseUrl}map_${nivelAdministrativo}_antiguedad_furgonetas.html`;
-            }
-            if (submapaSeleccionado === 'motocicletas') {
-                return `${baseUrl}map_${nivelAdministrativo}_antiguedad_motocicletas.html`;
-            }
-            if (submapaSeleccionado === 'total') {
-                return `${baseUrl}map_${nivelAdministrativo}_antiguedad_tot.html`;
-            }
+        if (submapaSeleccionado === 'eco') {
+            return `${baseUrl}map_${nivelAdministrativo}_distintivo_ECO.html`;
         }
-    
-        if (tipoMapa === 'parque_pc') {
-            if (submapaSeleccionado === 'camiones') {
-                return `${baseUrl}map_${nivelAdministrativo}_parque_camiones_pc.html`;
-            }
-            if (submapaSeleccionado === 'ciclomotores') {
-                return `${baseUrl}map_${nivelAdministrativo}_parque_ciclomotores_pc.html`;
-            }
-            if (submapaSeleccionado === 'furgonetas') {
-                return `${baseUrl}map_${nivelAdministrativo}_parque_furgonetas_pc.html`;
-            }
-            if (submapaSeleccionado === 'motocicletas') {
-                return `${baseUrl}map_${nivelAdministrativo}_parque_motocicletas_pc.html`;
-            }
-            if (submapaSeleccionado === 'total') {
-                return `${baseUrl}map_${nivelAdministrativo}_parque_pc.html`;
-            }
+        if (submapaSeleccionado === 'b') {
+            return `${baseUrl}map_${nivelAdministrativo}_distintivo_B.html`;
         }
-    
-        if (tipoMapa === 'censo_pc') {
-            if (submapaSeleccionado === 'total') {
-                return `${baseUrl}map_${nivelAdministrativo}_censo_pc.html`;
-            }
+        if (submapaSeleccionado === 'c') {
+            return `${baseUrl}map_${nivelAdministrativo}_distintivo_C.html`;
         }
-    
-        if (tipoMapa === 'composicion_parque') {
-            if (submapaSeleccionado === 'ciclomotores') {
-                return `${baseUrl}map_${nivelAdministrativo}_pct_ciclomotores.html`;
-            }
-            if (submapaSeleccionado === 'motocicletas') {
-                return `${baseUrl}map_${nivelAdministrativo}_pct_motocicletas.html`;
-            }
-            if (submapaSeleccionado === 'turismos') {
-                return `${baseUrl}map_${nivelAdministrativo}_pct_turismos.html`;
-            }
-            if (submapaSeleccionado === 'furgonetas') {
-                return `${baseUrl}map_${nivelAdministrativo}_pct_furgonetas.html`;
-            }
-            if (submapaSeleccionado === 'camiones') {
-                return `${baseUrl}map_${nivelAdministrativo}_pct_camiones.html`;
-            }
+        if (submapaSeleccionado === 'sin') {
+            return `${baseUrl}map_${nivelAdministrativo}_sin_distintivo.html`;
         }
-    
-        if (tipoMapa === 'vehiculos_sin_itv') {
-            if (submapaSeleccionado === 'sin_itv') {
-                return `${baseUrl}map_${nivelAdministrativo}_pct_vehiculos_sin_ITV.html`;
-            }
-            if (submapaSeleccionado === 'itv_turismos') {
-                return `${baseUrl}map_${nivelAdministrativo}_pct_ITV_turismos.html`;
-            }
-            if (submapaSeleccionado === 'itv_motocicletas') {
-                return `${baseUrl}map_${nivelAdministrativo}_pct_ITV_motocicletas.html`;
-            }
-            if (submapaSeleccionado === 'turismos_15_mas') {
-                return `${baseUrl}map_${nivelAdministrativo}_pct_turismos_15_mas.html`;
-            }
-            if (submapaSeleccionado === 'furgonetas_15_mas') {
-                return `${baseUrl}map_${nivelAdministrativo}_pct_furgonetas_15_mas.html`;
-            }
-            if (submapaSeleccionado === 'camiones_15_mas') {
-                return `${baseUrl}map_${nivelAdministrativo}_pct_camiones_15_mas.html`;
-            }
-        }
-    
-        return ''; // Si no se encuentra un mapa válido
     }
 
+    if (tipoMapa === 'antiguedad') {
+        if (submapaSeleccionado === 'camiones') {
+            return `${baseUrl}map_${nivelAdministrativo}_antiguedad_camiones.html`;
+        }
+        if (submapaSeleccionado === 'ciclomotores') {
+            return `${baseUrl}map_${nivelAdministrativo}_antiguedad_ciclomotores.html`;
+        }
+        if (submapaSeleccionado === 'furgonetas') {
+            return `${baseUrl}map_${nivelAdministrativo}_antiguedad_furgonetas.html`;
+        }
+        if (submapaSeleccionado === 'motocicletas') {
+            return `${baseUrl}map_${nivelAdministrativo}_antiguedad_motocicletas.html`;
+        }
+        if (submapaSeleccionado === 'total') {
+            return `${baseUrl}map_${nivelAdministrativo}_antiguedad_tot.html`;
+        }
+    }
+
+    if (tipoMapa === 'parque_pc') {
+        if (submapaSeleccionado === 'camiones') {
+            return `${baseUrl}map_${nivelAdministrativo}_parque_camiones_pc.html`;
+        }
+        if (submapaSeleccionado === 'ciclomotores') {
+            return `${baseUrl}map_${nivelAdministrativo}_parque_ciclomotores_pc.html`;
+        }
+        if (submapaSeleccionado === 'furgonetas') {
+            return `${baseUrl}map_${nivelAdministrativo}_parque_furgonetas_pc.html`;
+        }
+        if (submapaSeleccionado === 'motocicletas') {
+            return `${baseUrl}map_${nivelAdministrativo}_parque_motocicletas_pc.html`;
+        }
+        if (submapaSeleccionado === 'total') {
+            return `${baseUrl}map_${nivelAdministrativo}_parque_pc.html`;
+        }
+    }
+
+    if (tipoMapa === 'censo_pc') {
+        if (submapaSeleccionado === 'total') {
+            return `${baseUrl}map_${nivelAdministrativo}_censo_pc.html`;
+        }
+    }
+
+    if (tipoMapa === 'composicion_parque') {
+        if (submapaSeleccionado === 'ciclomotores') {
+            return `${baseUrl}map_${nivelAdministrativo}_pct_ciclomotores.html`;
+        }
+        if (submapaSeleccionado === 'motocicletas') {
+            return `${baseUrl}map_${nivelAdministrativo}_pct_motocicletas.html`;
+        }
+        if (submapaSeleccionado === 'turismos') {
+            return `${baseUrl}map_${nivelAdministrativo}_pct_turismos.html`;
+        }
+        if (submapaSeleccionado === 'furgonetas') {
+            return `${baseUrl}map_${nivelAdministrativo}_pct_furgonetas.html`;
+        }
+        if (submapaSeleccionado === 'camiones') {
+            return `${baseUrl}map_${nivelAdministrativo}_pct_camiones.html`;
+        }
+    }
+
+    if (tipoMapa === 'vehiculos_sin_itv') {
+        if (submapaSeleccionado === 'sin_itv') {
+            return `${baseUrl}map_${nivelAdministrativo}_pct_vehiculos_sin_ITV.html`;
+        }
+        if (submapaSeleccionado === 'itv_turismos') {
+            return `${baseUrl}map_${nivelAdministrativo}_pct_ITV_turismos.html`;
+        }
+        if (submapaSeleccionado === 'itv_motocicletas') {
+            return `${baseUrl}map_${nivelAdministrativo}_pct_ITV_motocicletas.html`;
+        }
+        if (submapaSeleccionado === 'turismos_15_mas') {
+            return `${baseUrl}map_${nivelAdministrativo}_pct_turismos_15_mas.html`;
+        }
+        if (submapaSeleccionado === 'furgonetas_15_mas') {
+            return `${baseUrl}map_${nivelAdministrativo}_pct_furgonetas_15_mas.html`;
+        }
+        if (submapaSeleccionado === 'camiones_15_mas') {
+            return `${baseUrl}map_${nivelAdministrativo}_pct_camiones_15_mas.html`;
+        }
+    }
+
+    return ''; // Si no se encuentra un mapa válido
+}
 
         // Función para manejar la selección de un tipo de mapa
         function actualizarMapa(tipo) {
