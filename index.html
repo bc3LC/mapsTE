@@ -109,6 +109,7 @@
         function actualizarNivel(nivel) {
             nivelAdministrativo = nivel; // Actualizamos el nivel
             marcarBotonSeleccionado(nivel, 'nivel'); // Marcar el botón seleccionado
+            actualizarSubmapa(); // Actualizar submapas dependiendo del nivel
             cargarMapa(); // Actualizar mapa, esto ahora es directo en cualquier clic
         }
 
