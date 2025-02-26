@@ -85,10 +85,11 @@
         /* Contenedor del botón de expandir y el texto de copyright */
         .expand-container {
             display: flex;
-            align-items: center; 
-            justify-content: start;
+            align-items: center; /* Alinea los elementos verticalmente */
+            justify-content: flex-start; /* Alinea los elementos a la izquierda */
             width: 100%;
             margin-top: 30px;
+            gap: 10px; /* Añadido para el espacio entre el botón y el texto */
         }
         
         /* Botón para expandir el mapa */
@@ -100,7 +101,6 @@
             border: none;
             cursor: pointer;
             transition: 0.3s;
-            margin-right: 10px; 
         }
         
         /* Hover del botón */
@@ -110,10 +110,10 @@
         
         /* Texto de copyright */
         .footer-text {
-            margin-left: 0; 
             font-size: 12px;
             color: #333;
         }
+
     </style>
 </head>
 <body>
