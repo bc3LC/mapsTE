@@ -7,8 +7,8 @@ authors:
   - family-names: Alonso-Epelde
     given-names: Eva
     orcid: "https://orcid.org/0000-0002-4052-1703"
-title: "Explotación gráfica de la base de datos de la DGT "Información sobre la composición del parque de vehículos y su antigüedad, y del censo de conductores. Datos consolidados (2023)" 
-version: "1.0" 
-doi: "Pending" 
-date-released: 2025-02-26  
-url: "https://bc3lc.github.io/mapsTE/" 
+title: "Explotación gráfica de la base de datos de la DGT 'Información sobre la composición del parque de vehículos y su antigüedad, y del censo de conductores. Datos consolidados (2023)'"
+version: "1.0"
+doi: "Pending"
+date-released: "2025-02-26"
+url: "https://bc3lc.github.io/mapsTE/"
