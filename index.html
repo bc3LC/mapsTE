@@ -104,7 +104,7 @@
             resetearBotones('mapa');  // Solo desmarcar botones de la sección de mapa
             document.getElementById(`btn${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`).classList.add('selected');
             actualizarSubmapa();  // Aquí es donde se actualizan los submapas
-            actualizarMapa(); // Actualizar el mapa después de elegir el tipo
+            actualizarMapa(); // Ahora se recarga el mapa después de cualquier acción
         }
 
         // Al seleccionar el nivel administrativo, se marca el botón seleccionado
@@ -112,7 +112,7 @@
             nivelAdministrativo = nivel;
             resetearBotones('nivel');  // Solo desmarcar botones de la sección de nivel
             document.getElementById(`btn${nivel.charAt(0).toUpperCase() + nivel.slice(1)}`).classList.add('selected');
-            actualizarMapa(); // Actualizar el mapa con el nivel seleccionado
+            actualizarMapa(); // Ahora se recarga el mapa después de seleccionar un nivel
         }
 
         // Al seleccionar un submapa, se marca el botón seleccionado
@@ -120,7 +120,7 @@
             submapaSeleccionado = submapa;
             resetearBotones('submapa');  // Solo desmarcar botones de la sección de submapa
             document.getElementById(`btn${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`).classList.add('selected');
-            actualizarMapa(); // Actualizar el mapa con el submapa seleccionado
+            actualizarMapa(); // Ahora se recarga el mapa después de seleccionar un submapa
         }
 
         // Resetear los botones de la sección correspondiente (mapa, nivel o submapa)
