@@ -34,11 +34,13 @@
         .menu {
             width: 100%;
             background: #4EBF7B;
-            padding: 10px;
+            height: 100px; 
+            padding: 2px;
             color: white;
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 30px; 
+            flex-wrap: wrap;
         }
 
         /* Estilos de los botones de la barra de selección */
@@ -50,7 +52,6 @@
             padding: 8px; 
             cursor: pointer;
             transition: 0.3s;
-            width: 140px; /* Ajustado para que los botones se acomoden */
         }
 
         /* Botón seleccionado */
@@ -138,7 +139,7 @@
         <!-- Botones para seleccionar el nivel administrativo -->
         <div>
             <h3>Seleccionar Nivel Administrativo</h3>
-            <button id="nivel-ccaa" onclick="actualizarNivel('ccaa')">Comunidad Autónoma</button>
+            <button id="nivel-ccaa" onclick="actualizarNivel('ccaa')">CCAA</button>
             <button id="nivel-prov" onclick="actualizarNivel('prov')">Provincia</button>
             <button id="nivel-muni" onclick="actualizarNivel('muni')">Municipio</button>
         </div>
@@ -174,21 +175,24 @@
 function obtenerUrlMapa() {
     const baseUrl = "https://bc3lc.github.io/mapsTE/mapas_dinamicos/";
 
-    if (tipoMapa === 'distintivos') {
-        if (submapaSeleccionado === '0') {
-            return `${baseUrl}map_${nivelAdministrativo}_distintivo_0.html`;
+    if (tipoMapa === 'motorizacion') {
+        if (submapaSeleccionado === 'camiones') {
+            return `${baseUrl}map_${nivelAdministrativo}_parque_camiones_pc.html`;
         }
-        if (submapaSeleccionado === 'eco') {
-            return `${baseUrl}map_${nivelAdministrativo}_distintivo_ECO.html`;
+        if (submapaSeleccionado === 'ciclomotores') {
+            return `${baseUrl}map_${nivelAdministrativo}_parque_ciclomotores_pc.html`;
         }
-        if (submapaSeleccionado === 'b') {
-            return `${baseUrl}map_${nivelAdministrativo}_distintivo_B.html`;
+        if (submapaSeleccionado === 'furgonetas') {
+            return `${baseUrl}map_${nivelAdministrativo}_parque_furgonetas_pc.html`;
         }
-        if (submapaSeleccionado === 'c') {
-            return `${baseUrl}map_${nivelAdministrativo}_distintivo_C.html`;
+        if (submapaSeleccionado === 'motocicletas') {
+            return `${baseUrl}map_${nivelAdministrativo}_parque_motocicletas_pc.html`;
         }
-        if (submapaSeleccionado === 'sin') {
-            return `${baseUrl}map_${nivelAdministrativo}_sin_distintivo.html`;
+        if (submapaSeleccionado === 'total') {
+            return `${baseUrl}map_${nivelAdministrativo}_parque_pc.html`;
+
+        if (submapaSeleccionado === 'censo') {
+            return `${baseUrl}map_${nivelAdministrativo}_censo_pc.html`;
         }
     }
 
@@ -210,31 +214,7 @@ function obtenerUrlMapa() {
         }
     }
 
-    if (tipoMapa === 'parque_pc') {
-        if (submapaSeleccionado === 'camiones') {
-            return `${baseUrl}map_${nivelAdministrativo}_parque_camiones_pc.html`;
-        }
-        if (submapaSeleccionado === 'ciclomotores') {
-            return `${baseUrl}map_${nivelAdministrativo}_parque_ciclomotores_pc.html`;
-        }
-        if (submapaSeleccionado === 'furgonetas') {
-            return `${baseUrl}map_${nivelAdministrativo}_parque_furgonetas_pc.html`;
-        }
-        if (submapaSeleccionado === 'motocicletas') {
-            return `${baseUrl}map_${nivelAdministrativo}_parque_motocicletas_pc.html`;
-        }
-        if (submapaSeleccionado === 'total') {
-            return `${baseUrl}map_${nivelAdministrativo}_parque_pc.html`;
-        }
-    }
-
-    if (tipoMapa === 'censo_pc') {
-        if (submapaSeleccionado === 'total') {
-            return `${baseUrl}map_${nivelAdministrativo}_censo_pc.html`;
-        }
-    }
-
-    if (tipoMapa === 'composicion_parque') {
+    if (tipoMapa === 'composicion') {
         if (submapaSeleccionado === 'ciclomotores') {
             return `${baseUrl}map_${nivelAdministrativo}_pct_ciclomotores.html`;
         }
@@ -252,7 +232,7 @@ function obtenerUrlMapa() {
         }
     }
 
-    if (tipoMapa === 'vehiculos_sin_itv') {
+    if (tipoMapa === 'vehiculos') {
         if (submapaSeleccionado === 'sin_itv') {
             return `${baseUrl}map_${nivelAdministrativo}_pct_vehiculos_sin_ITV.html`;
         }
@@ -270,6 +250,24 @@ function obtenerUrlMapa() {
         }
         if (submapaSeleccionado === 'camiones_15_mas') {
             return `${baseUrl}map_${nivelAdministrativo}_pct_camiones_15_mas.html`;
+        }
+    }
+
+        if (tipoMapa === 'distintivos') {
+        if (submapaSeleccionado === '0') {
+            return `${baseUrl}map_${nivelAdministrativo}_distintivo_0.html`;
+        }
+        if (submapaSeleccionado === 'eco') {
+            return `${baseUrl}map_${nivelAdministrativo}_distintivo_ECO.html`;
+        }
+        if (submapaSeleccionado === 'b') {
+            return `${baseUrl}map_${nivelAdministrativo}_distintivo_B.html`;
+        }
+        if (submapaSeleccionado === 'c') {
+            return `${baseUrl}map_${nivelAdministrativo}_distintivo_C.html`;
+        }
+        if (submapaSeleccionado === 'sin') {
+            return `${baseUrl}map_${nivelAdministrativo}_sin_distintivo.html`;
         }
     }
 
@@ -307,12 +305,14 @@ function obtenerUrlMapa() {
             else if (tipoMapa === 'composicion') {
                 submapas = ['pct_ciclomotores', 'pct_motocicletas', 'pct_turismos', 'pct_furgonetas', 'pct_camiones'];
             }
+
+             else if (tipoMapa === 'distintivos') {
+                submapas = ['distintivo_B', 'distintivo_C', 'distintivo_ECO', 'distintivo_0', 'sin_distintivo', 'distintivo_ECO_0'];
+            }
             else if (tipoMapa === 'vehiculos') {
                 submapas = ['pct_vehiculos_sin_ITV', 'pct_ITV_turismos', 'pct_ITV_motocicletas', 'pct_turismos_15_mas', 'pct_furgonetas_15_mas', 'pct_camiones_15_mas'];
             }
-            else if (tipoMapa === 'distintivos') {
-                submapas = ['distintivo_B', 'distintivo_C', 'distintivo_ECO', 'distintivo_0', 'sin_distintivo', 'distintivo_ECO_0'];
-            }
+       
 
             // Definir etiquetas personalizadas para los submapas
             const etiquetasSubmapas = {
