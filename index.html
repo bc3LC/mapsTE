@@ -103,19 +103,19 @@
             tipoMapa = tipo; // Actualizamos el tipo de mapa
             marcarBotonSeleccionado(tipo, 'mapa'); // Marcar el botón seleccionado
             actualizarSubmapa(); // Actualizar submapas
-            cargarMapa(); // Actualizar mapa
+            cargarMapa(); // Actualizar mapa, esto ahora es directo en cualquier clic
         }
 
         function actualizarNivel(nivel) {
             nivelAdministrativo = nivel; // Actualizamos el nivel
             marcarBotonSeleccionado(nivel, 'nivel'); // Marcar el botón seleccionado
-            cargarMapa(); // Actualizar mapa
+            cargarMapa(); // Actualizar mapa, esto ahora es directo en cualquier clic
         }
 
         function actualizarSubmapa(submapa) {
             submapaSeleccionado = submapa; // Actualizamos el submapa
             marcarBotonSeleccionado(submapa, 'submapa'); // Marcar el botón seleccionado
-            cargarMapa(); // Actualizar mapa
+            cargarMapa(); // Actualizar mapa, esto ahora es directo en cualquier clic
         }
 
         // Marcar el botón seleccionado en cada sección (mapa, nivel o submapa)
@@ -152,7 +152,7 @@
             submapas.forEach(submapa => {
                 const btn = document.createElement("button");
                 btn.innerText = `${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`;
-                btn.onclick = () => actualizarSubmapa(submapa);
+                btn.onclick = () => actualizarSubmapa(submapa); // Cada submapa también carga el mapa
                 submapaContainer.appendChild(btn);
             });
 
@@ -232,7 +232,7 @@
         // Cargar mapa
         function cargarMapa() {
             const url = obtenerUrlMapa();
-            document.getElementById("mapaFrame").src = url;
+            document.getElementById("mapaFrame").src = url; // Recargar el mapa al cambiar cualquier sección
         }
 
         // Función para expandir el mapa en una nueva pestaña
