@@ -209,6 +209,9 @@
                 if (submapaSeleccionado === 'motocicletas') {
                     return `${baseUrl}map_${nivelAdministrativo}_antiguedad_motocicletas.html`;
                 }
+                if (submapaSeleccionado === 'turismos') {
+                    return `${baseUrl}map_${nivelAdministrativo}_antiguedad_turismos.html`;
+                }
                 if (submapaSeleccionado === 'total') {
                     return `${baseUrl}map_${nivelAdministrativo}_antiguedad_tot.html`;
                 }
@@ -303,7 +306,7 @@
                 submapas = ['camiones', 'ciclomotores', 'furgonetas', 'motocicletas', 'total', 'conductores'];
             }
             else if (tipoMapa === 'antiguedad') {
-                submapas = ['camiones', 'ciclomotores', 'furgonetas', 'motocicletas', 'total'];
+                submapas = ['camiones', 'ciclomotores', 'furgonetas', 'motocicletas', 'turismos', 'total'];
             }
             else if (tipoMapa === 'composicion') {
                 submapas = ['ciclomotores', 'motocicletas', 'turismos', 'furgonetas', 'camiones'];
