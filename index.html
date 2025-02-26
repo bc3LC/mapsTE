@@ -20,6 +20,7 @@
             background-color: #f4f4f4;
         }
 
+        /* Primera barra superior con el título y la descripción */
         .header {
             width: 100%;
             background: #11302D;
@@ -29,37 +30,41 @@
             text-align: center;
         }
         
+        /* Segunda barra donde están los botones de selección */
         .menu {
             width: 100%;
             background: #4EBF7B;
-            height: auto;
-            padding: 10px;
+            height: 100px; 
+            padding: 2px;
             color: white;
             display: flex;
             justify-content: center;
+            gap: 30px; 
             flex-wrap: wrap;
-            gap: 20px;
         }
 
+        /* Estilos de los botones de la barra de selección */
         .menu button {
             font-family: 'Outfit', sans-serif;
             background: #11302D;
             color: white;
             border: none;
-            padding: 10px;
+            padding: 8px; 
             cursor: pointer;
             transition: 0.3s;
         }
 
+        /* Botón seleccionado */
         .menu button.selected {
             background: white;
             color: #11302D;
         }
 
+        /* Efecto hover en los botones */
         .menu button:hover {
             background: #666;
         }
-        
+
         /* Contenedor principal del mapa */
         .container {
             width: 90%;
@@ -80,11 +85,11 @@
         /* Contenedor del botón de expandir y el texto de copyright */
         .expand-container {
             display: flex;
-            align-items: center;
-            justify-content: flex-start;
+            align-items: center; /* Alinea los elementos verticalmente */
+            justify-content: flex-start; /* Alinea los elementos a la izquierda */
             width: 100%;
             margin-top: 30px;
-            gap: 10px;
+            gap: 10px; /* Añadido para el espacio entre el botón y el texto */
         }
         
         /* Botón para expandir el mapa */
@@ -120,21 +125,21 @@
     </div>
 
     <!-- Menú con los botones para seleccionar el mapa, nivel y submapa -->
-    <div class="menu">
+<div class="menu">
         <!-- Botones para seleccionar el mapa -->
         <div>
             <h3>Seleccionar Mapa</h3>
-            <button id="mapa-motorizacion" onclick="actualizarMapa('motorizacion')">Índices de Motorización</button>
-            <button id="mapa-antiguedad" onclick="actualizarMapa('antiguedad')">Antigüedad media</button>
-            <button id="mapa-composicion" onclick="actualizarMapa('composicion')">Composición del parque</button>
-            <button id="mapa-vehiculos" onclick="actualizarMapa('vehiculos')">Sin ITV y antiguos</button>
+            <button id="mapa-motorizacion" onclick="actualizarMapa('motorizacion')">Motorización</button>
+            <button id="mapa-antiguedad" onclick="actualizarMapa('antiguedad')">Antigüedad</button>
+            <button id="mapa-composicion" onclick="actualizarMapa('composicion')">Composición</button>
+            <button id="mapa-vehiculos" onclick="actualizarMapa('vehiculos')">Vehículos</button>
             <button id="mapa-distintivos" onclick="actualizarMapa('distintivos')">Distintivos</button>
         </div>
 
         <!-- Botones para seleccionar el nivel administrativo -->
         <div>
             <h3>Seleccionar Nivel Administrativo</h3>
-            <button id="nivel-ccaa" onclick="actualizarNivel('ccaa')">CCAA</button>
+            <button id="nivel-ccaa" onclick="actualizarNivel('ccaa')">Comunidad Autónoma</button>
             <button id="nivel-prov" onclick="actualizarNivel('prov')">Provincia</button>
             <button id="nivel-muni" onclick="actualizarNivel('muni')">Municipio</button>
         </div>
@@ -142,6 +147,7 @@
         <!-- Botones para seleccionar el submapa -->
         <div id="submapaContainer">
             <h3>Seleccionar Submapa</h3>
+            <!-- Los submapas se cargarán dinámicamente aquí -->
         </div>
     </div>
 
@@ -154,15 +160,15 @@
     </div>
 
     <script>
-        let tipoMapa = 'motorizacion'; 
-        let nivelAdministrativo = 'ccaa'; 
-        let submapaSeleccionado = 'censo_pc';
+        let tipoMapa = 'motorizacion'; // Mapa predeterminado
+        let nivelAdministrativo = 'ccaa'; // Nivel predeterminado
+        let submapaSeleccionado = 'camiones'; // Submapa predeterminado
 
         // Función que actualiza la URL del mapa y recarga el iframe
         function cargarMapa() {
             const url = obtenerUrlMapa();
-            document.getElementById("mapaFrame").src = url;
-            actualizarBotones();
+            document.getElementById("mapaFrame").src = url; // Recargar el mapa al cambiar cualquier sección
+            actualizarBotones(); // Actualizar el estilo de los botones
         }
 
         // Función para obtener la URL del mapa dependiendo de las selecciones
@@ -185,7 +191,7 @@
                 if (submapaSeleccionado === 'total') {
                     return `${baseUrl}map_${nivelAdministrativo}_parque_pc.html`;
                 }
-                if (submapaSeleccionado === 'censo_pc') {
+                if (submapaSeleccionado === 'conductores') {
                     return `${baseUrl}map_${nivelAdministrativo}_censo_pc.html`;
                 }
             }
@@ -227,81 +233,130 @@
             }
 
             if (tipoMapa === 'vehiculos') {
-                if (submapaSeleccionado === 'pct_vehiculos_sin_ITV') {
+                if (submapaSeleccionado === 'vehiculos_sin_itv') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_vehiculos_sin_ITV.html`;
                 }
-                if (submapaSeleccionado === 'pct_ITV_turismos') {
+                if (submapaSeleccionado === 'itv_turismos') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_ITV_turismos.html`;
                 }
-                if (submapaSeleccionado === 'pct_ITV_motocicletas') {
+                if (submapaSeleccionado === 'itv_motocicletas') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_ITV_motocicletas.html`;
                 }
-                if (submapaSeleccionado === 'pct_turismos_15_mas') {
+                if (submapaSeleccionado === 'turismos_25') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_turismos_15_mas.html`;
                 }
-                if (submapaSeleccionado === 'pct_furgonetas_15_mas') {
+                if (submapaSeleccionado === 'furgonetas_25') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_furgonetas_15_mas.html`;
                 }
-                if (submapaSeleccionado === 'pct_camiones_15_mas') {
+                if (submapaSeleccionado === 'camiones_25') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_camiones_15_mas.html`;
                 }
             }
 
             if (tipoMapa === 'distintivos') {
-                if (submapaSeleccionado === 'distintivo_ECO_0') {
+                if (submapaSeleccionado === 'eco_0') {
                     return `${baseUrl}map_${nivelAdministrativo}_distintivo_ECO_0.html`;
                 }
-                if (submapaSeleccionado === 'distintivo_ECO_1') {
-                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_ECO_1.html`;
+                if (submapaSeleccionado === 'eco') {
+                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_ECO.html`;
                 }
-                if (submapaSeleccionado === 'distintivo_ECO_2') {
-                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_ECO_2.html`;
+                if (submapaSeleccionado === '0') {
+                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_0.html`;
+                }
+                if (submapaSeleccionado === 'b') {
+                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_B.html`;
+                }
+                if (submapaSeleccionado === 'c') {
+                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_C.html`;
+                }
+                if (submapaSeleccionado === 'sin') {
+                    return `${baseUrl}map_${nivelAdministrativo}_sin_distintivo.html`;
                 }
             }
 
-            return '';
+            return ''; // Si no se encuentra un mapa válido
         }
 
-        // Función para actualizar los botones de mapa y submapa
-        function actualizarBotones() {
-            // Ajustar el estado de los botones
-            document.querySelectorAll(".menu button").forEach(button => button.classList.remove("selected"));
-            document.getElementById(`mapa-${tipoMapa}`).classList.add("selected");
+        // Función para manejar la selección de un tipo de mapa
+        function actualizarMapa(tipo) {
+            tipoMapa = tipo; // Actualizamos el tipo de mapa
+            actualizarSubmapa(); // Actualizar submapas
+            cargarMapa(); // Recargar el mapa
+        }
 
-            // Generar el contenido de submapa en función del tipo de mapa seleccionado
-            let submapasHTML = '';
+        // Función para manejar la selección de un nivel administrativo
+        function actualizarNivel(nivel) {
+            nivelAdministrativo = nivel; // Actualizamos el nivel administrativo
+            actualizarSubmapa(); // Actualizar submapas según el tipo de mapa y nivel
+            cargarMapa(); // Recargar el mapa
+        }
+
+        // Actualizar los submapas disponibles según el tipo de mapa seleccionado
+        function actualizarSubmapa() {
+            const submapaContainer = document.getElementById("submapaContainer");
+            submapaContainer.innerHTML = '<h3>Seleccionar Submapa</h3>'; // Reiniciar contenido de submapa
+
+            let submapas = [];
+            
+            // Definir los submapas según el tipo de mapa
             if (tipoMapa === 'motorizacion') {
-                submapasHTML += '<button onclick="actualizarSubmapa(\'censo_pc\')">Censo PC</button>';
-                submapasHTML += '<button onclick="actualizarSubmapa(\'total\')">Total</button>';
-            } else if (tipoMapa === 'antiguedad') {
-                submapasHTML += '<button onclick="actualizarSubmapa(\'total\')">Total</button>';
-            } else if (tipoMapa === 'composicion') {
-                submapasHTML += '<button onclick="actualizarSubmapa(\'camiones\')">Camiones</button>';
-                submapasHTML += '<button onclick="actualizarSubmapa(\'furgonetas\')">Furgonetas</button>';
-            } else if (tipoMapa === 'vehiculos') {
-                submapasHTML += '<button onclick="actualizarSubmapa(\'pct_vehiculos_sin_ITV\')">Vehículos sin ITV</button>';
-            } else if (tipoMapa === 'distintivos') {
-                submapasHTML += '<button onclick="actualizarSubmapa(\'distintivo_ECO_0\')">Distintivo ECO 0</button>';
+                submapas = ['camiones', 'ciclomotores', 'furgonetas', 'motocicletas', 'total', 'conductores'];
+            }
+            else if (tipoMapa === 'antiguedad') {
+                submapas = ['camiones', 'ciclomotores', 'furgonetas', 'motocicletas', 'total'];
+            }
+            else if (tipoMapa === 'composicion') {
+                submapas = ['ciclomotores', 'motocicletas', 'turismos', 'furgonetas', 'camiones'];
+            }
+            else if (tipoMapa === 'vehiculos') {
+                submapas = ['vehiculos_sin_itv', 'itv_turismos', 'itv_motocicletas', 'turismos_25', 'furgonetas_25', 'camiones_25'];
+            }
+            else if (tipoMapa === 'distintivos') {
+                submapas = ['eco_0', 'eco', '0', 'b', 'c', 'sin'];
             }
 
-            document.getElementById("submapaContainer").innerHTML = submapasHTML;
-            cargarMapa();
+            // Crear los botones de submapas
+            submapas.forEach(submapa => {
+                const btn = document.createElement("button");
+                btn.innerText = `${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`;
+                btn.id = `submapa-${submapa}`;
+                btn.onclick = () => actualizarSubmapaSeleccionado(submapa); // Cada submapa también carga el mapa
+                submapaContainer.appendChild(btn);
+            });
         }
 
-        // Función para actualizar el mapa seleccionado
-        function actualizarMapa(mapa) {
-            tipoMapa = mapa;
-            actualizarBotones();
-        }
-
-        // Función para actualizar el submapa seleccionado
-        function actualizarSubmapa(submapa) {
+        // Actualizar el submapa seleccionado
+        function actualizarSubmapaSeleccionado(submapa) {
             submapaSeleccionado = submapa;
-            cargarMapa();
+            cargarMapa(); // Recargar el mapa
         }
 
-        // Inicializar el mapa
-        actualizarMapa(tipoMapa);
+        // Función para expandir el mapa en una nueva pestaña
+        function expandirMapa() {
+            let iframe = document.getElementById("mapaFrame");
+            const url = iframe.src;
+            window.open(url, "_blank");
+        }
+
+        // Función para actualizar el estilo de los botones seleccionados
+        function actualizarBotones() {
+            // Restablecer todos los botones
+            document.querySelectorAll('.menu button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Resaltar los botones activos
+            document.getElementById(`mapa-${tipoMapa}`).classList.add('selected');
+            document.getElementById(`nivel-${nivelAdministrativo}`).classList.add('selected');
+            document.getElementById(`submapa-${submapaSeleccionado}`).classList.add('selected');
+        }
+
+        // Cargar mapa inicial al cargar la página
+        window.onload = () => {
+            actualizarSubmapa(); // Cargar submapas según el mapa predeterminado
+            cargarMapa(); // Cargar el mapa inicial
+        };
+
     </script>
 
 </body>
