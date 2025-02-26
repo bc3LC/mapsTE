@@ -114,9 +114,11 @@
         }
 
         function actualizarSubmapa(submapa) {
-            submapaSeleccionado = submapa; // Actualizamos el submapa
-            marcarBotonSeleccionado(submapa, 'submapa'); // Marcar el botón seleccionado
-            cargarMapa(); // Actualizar mapa, esto ahora es directo en cualquier clic
+            if (submapa !== undefined) {
+                submapaSeleccionado = submapa; // Actualizamos el submapa
+            }
+            marcarBotonSeleccionado(submapaSeleccionado, 'submapa'); // Marcar el botón seleccionado
+            cargarMapa(); // Actualizar mapa
         }
 
         // Marcar el botón seleccionado en cada sección (mapa, nivel o submapa)
@@ -238,18 +240,4 @@
 
         // Función para expandir el mapa en una nueva pestaña
         function expandirMapa() {
-            let iframe = document.getElementById("mapaFrame");
-            const url = iframe.src;
-            window.open(url, "_blank");
-        }
-
-        // Cargar mapa inicial al cargar la página
-        window.onload = () => {
-            actualizarSubmapa(); // Cargar submapas según el mapa predeterminado
-            cargarMapa(); // Cargar mapa predeterminado
-        };
-    </script>
-
-</body>
-</html>
- 
+            let iframe = document.getElementById("map
