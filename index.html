@@ -159,10 +159,11 @@
                 submapaContainer.appendChild(btn);
             });
 
-            // Seleccionar el primer submapa automáticamente si no se ha seleccionado otro
+            // Si no hay submapa seleccionado, automáticamente seleccionar el primero
             if (!submapaSeleccionado) {
-                actualizarSubmapa(submapas[0]);
+                submapaSeleccionado = submapas[0];
             }
+            actualizarSubmapa(submapaSeleccionado);
         }
 
         // Función para obtener la URL del mapa dependiendo de las selecciones
