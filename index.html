@@ -34,11 +34,9 @@
         .menu {
             width: 100%;
             background: #4EBF7B;
-            height: 200px; /* Ajustado para 2 filas */
             padding: 10px;
             color: white;
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
             gap: 15px;
         }
@@ -131,10 +129,10 @@
         <div>
             <h3>Seleccionar Mapa</h3>
             <button id="mapa-motorizacion" onclick="actualizarMapa('motorizacion')">Índices de Motorización</button>
-            <button id="mapa-antiguedad" onclick="actualizarMapa('antiguedad')">Antigüedad Media</button>
-            <button id="mapa-composicion" onclick="actualizarMapa('composicion')">Composición del Parque</button>
-            <button id="mapa-vehiculos" onclick="actualizarMapa('vehiculos')">Vehículos sin ITV</button>
-            <button id="mapa-distintivos" onclick="actualizarMapa('distintivos')">Distribución Distintivos</button>
+            <button id="mapa-antiguedad" onclick="actualizarMapa('antiguedad')">Antigüedad media</button>
+            <button id="mapa-composicion" onclick="actualizarMapa('composicion')">Composición del parque</button>
+            <button id="mapa-vehiculos" onclick="actualizarMapa('vehiculos')">Sin ITV y antiguos</button>
+            <button id="mapa-distintivos" onclick="actualizarMapa('distintivos')">Distintivos</button>
         </div>
 
         <!-- Botones para seleccionar el nivel administrativo -->
@@ -234,18 +232,18 @@
                 submapas = ['pct_vehiculos_sin_ITV', 'pct_ITV_turismos', 'pct_ITV_motocicletas', 'pct_turismos_15_mas', 'pct_furgonetas_15_mas', 'pct_camiones_15_mas'];
             }
             else if (tipoMapa === 'distintivos') {
-                submapas = ['distintivo_B', 'distintivo_C', 'distintivo_ECO', 'distintivo_0', 'sin_distintivo', 'distintivo_ECO_0', 'pct_ECO_0'];
+                submapas = ['distintivo_B', 'distintivo_C', 'distintivo_ECO', 'distintivo_0', 'sin_distintivo', 'distintivo_ECO_0'];
             }
 
             // Definir etiquetas personalizadas para los submapas
             const etiquetasSubmapas = {
-                'censo_pc': 'Conductores per cápita',
-                'parque_pc': 'Vehículos per cápita',
-                'parque_ciclomotores_pc': 'Ciclomotores per cápita',
-                'parque_motocicletas_pc': 'Motocicletas per cápita',
-                'parque_turismos_pc': 'Turismos per cápita',
-                'parque_furgonetas_pc': 'Furgonetas per cápita',
-                'parque_camiones_pc': 'Camiones per cápita',
+                'censo_pc': 'Conductores',
+                'parque_pc': 'Vehículos',
+                'parque_ciclomotores_pc': 'Ciclomotores',
+                'parque_motocicletas_pc': 'Motocicletas',
+                'parque_turismos_pc': 'Turismos',
+                'parque_furgonetas_pc': 'Furgonetas',
+                'parque_camiones_pc': 'Camiones',
                 'antiguedad_tot': 'Total',
                 'antiguedad_ciclomotores': 'Ciclomotores',
                 'antiguedad_motocicletas': 'Motocicletas',
@@ -255,9 +253,9 @@
                 'pct_ciclomotores': 'Ciclomotores',
                 'pct_motocicletas': 'Motocicletas',
                 'pct_turismos': 'Turismos',
-                'pct_furgonetas': 'Composición Furgonetas',
+                'pct_furgonetas': 'Furgonetas',
                 'pct_camiones': 'Camiones',
-                'pct_vehiculos_sin_ITV': 'Vehículos sin ITV',
+                'pct_vehiculos_sin_ITV': 'Total sin ITV',
                 'pct_ITV_turismos': 'Turismos sin ITV',
                 'pct_ITV_motocicletas': 'Motocicletas sin ITV',
                 'pct_turismos_15_mas': 'Turismos 15+ años',
