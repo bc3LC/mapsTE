@@ -237,14 +237,49 @@
                 submapas = ['distintivo_B', 'distintivo_C', 'distintivo_ECO', 'distintivo_0', 'sin_distintivo', 'distintivo_ECO_0', 'pct_ECO_0'];
             }
 
-            // Crear los botones de submapas
+            // Definir etiquetas personalizadas para los submapas
+            const etiquetasSubmapas = {
+                'censo_pc': 'Conductores per cápita',
+                'parque_pc': 'Vehículos per cápita',
+                'parque_ciclomotores_pc': 'Ciclomotores per cápita',
+                'parque_motocicletas_pc': 'Motocicletas per cápita',
+                'parque_turismos_pc': 'Turismos per cápita',
+                'parque_furgonetas_pc': 'Furgonetas per cápita',
+                'parque_camiones_pc': 'Camiones per cápita',
+                'antiguedad_tot': 'Total',
+                'antiguedad_ciclomotores': 'Ciclomotores',
+                'antiguedad_motocicletas': 'Motocicletas',
+                'antiguedad_turismos': 'Turismos',
+                'antiguedad_furgonetas': 'Furgonetas',
+                'antiguedad_camiones': 'Camiones',
+                'pct_ciclomotores': 'Ciclomotores',
+                'pct_motocicletas': 'Motocicletas',
+                'pct_turismos': 'Turismos',
+                'pct_furgonetas': 'Composición Furgonetas',
+                'pct_camiones': 'Camiones',
+                'pct_vehiculos_sin_ITV': 'Vehículos sin ITV',
+                'pct_ITV_turismos': 'Turismos sin ITV',
+                'pct_ITV_motocicletas': 'Motocicletas sin ITV',
+                'pct_turismos_15_mas': 'Turismos 15+ años',
+                'pct_furgonetas_15_mas': 'Furgonetas 15+ años',
+                'pct_camiones_15_mas': 'Camiones 15+ años',
+                'distintivo_B': 'B',
+                'distintivo_C': 'C',
+                'distintivo_ECO': 'ECO',
+                'distintivo_0': '0',
+                'sin_distintivo': 'Sin',
+                'distintivo_ECO_0': 'ECO+0'
+            };
+            
+            // Crear los botones de submapas con las etiquetas personalizadas
             submapas.forEach(submapa => {
                 const btn = document.createElement("button");
-                btn.innerText = `${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`;
+                btn.innerText = etiquetasSubmapas[submapa] || `${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`; // Usar la etiqueta personalizada
                 btn.id = `submapa-${submapa}`;
                 btn.onclick = () => actualizarSubmapaSeleccionado(submapa); // Cada submapa también carga el mapa
                 submapaContainer.appendChild(btn);
             });
+
         }
 
         // Actualizar el submapa seleccionado
