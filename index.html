@@ -25,7 +25,7 @@
             width: 100%;
             background: #11302D;
             color: white;
-            padding: 10px; /* Reducido de 15px a 10px */
+            padding: 8px; /* Reducido de 15px a 10px */
             text-align: center;
         }
 
@@ -33,7 +33,7 @@
         .menu {
             width: 100%;
             background: #4EBF7B;
-            padding: 8px; /* Reducido de 10px a 8px */
+            padding: 6px; /* Reducido de 10px a 8px */
             color: white;
             display: flex;
             justify-content: center;
@@ -76,7 +76,7 @@
         /* Estilos para el iframe del mapa */
         iframe {
             width: 100%;
-            height: 500px;
+            height: 480px;
             border: none;
         }
 
@@ -122,101 +122,189 @@
     </div>
 
     <!-- Menú con los botones para seleccionar el mapa, nivel y submapa -->
-    <div class="menu">
+<div class="menu">
+        <!-- Botones para seleccionar el mapa -->
         <div>
             <h3>Seleccionar Mapa</h3>
-            <button onclick="actualizarMapa('distintivos')">Distintivos Ambientales</button>
-            <button onclick="actualizarMapa('antiguedad')">Antigüedad</button>
-            <button onclick="actualizarMapa('parque_pc')">Parque por Cápita</button>
-            <button onclick="actualizarMapa('censo_pc')">Vehículos Censados por Cápita</button>
+            <button id="mapa-distintivos" onclick="actualizarMapa('distintivos')">Distintivos Ambientales</button>
+            <button id="mapa-antiguedad" onclick="actualizarMapa('antiguedad')">Antigüedad</button>
+            <button id="mapa-parque_pc" onclick="actualizarMapa('parque_pc')">Parque por Cápita</button>
+            <button id="mapa-censo_pc" onclick="actualizarMapa('censo_pc')">Vehículos Censados por Cápita</button>
         </div>
 
+        <!-- Botones para seleccionar el nivel administrativo -->
         <div>
             <h3>Seleccionar Nivel Administrativo</h3>
-            <button onclick="actualizarNivel('ccaa')">Comunidad Autónoma</button>
-            <button onclick="actualizarNivel('prov')">Provincia</button>
-            <button onclick="actualizarNivel('muni')">Municipio</button>
+            <button id="nivel-ccaa" onclick="actualizarNivel('ccaa')">Comunidad Autónoma</button>
+            <button id="nivel-prov" onclick="actualizarNivel('prov')">Provincia</button>
+            <button id="nivel-muni" onclick="actualizarNivel('muni')">Municipio</button>
         </div>
 
-        <!-- Contenedor para los botones de submapas (se generarán dinámicamente) -->
+        <!-- Botones para seleccionar el submapa -->
         <div id="submapaContainer">
             <h3>Seleccionar Submapa</h3>
+            <!-- Los submapas se cargarán dinámicamente aquí -->
         </div>
     </div>
 
-    <!-- Contenedor principal con el mapa y botón de expansión -->
     <div class="container">
         <iframe id="mapaFrame" src=""></iframe>
-        <div class="expand-container">
-            <button class="expand" onclick="expandirMapa()">🔍 Expandir</button>
-            <div class="footer-text">(C) BC3 Low Carbon group. Please citation required if used.</div>
-        </div>
+        <button class="expand" onclick="expandirMapa()">🔍 Expandir</button>
+        <div class="footer-text">(C) BC2 Low Carbon group. Please citation required if used.</div>
     </div>
 
     <script>
-        // Variables globales para gestionar la selección del mapa
-        let tipoMapa = 'distintivos';
-        let nivelAdministrativo = 'ccaa';
-        let submapaSeleccionado = '0';
+        let tipoMapa = 'distintivos'; // Mapa predeterminado
+        let nivelAdministrativo = 'ccaa'; // Nivel predeterminado
+        let submapaSeleccionado = '0'; // Submapa predeterminado
 
-        // Función para obtener la URL del mapa según las selecciones
+        // Función que actualiza la URL del mapa y recarga el iframe
+        function cargarMapa() {
+            const url = obtenerUrlMapa();
+            document.getElementById("mapaFrame").src = url; // Recargar el mapa al cambiar cualquier sección
+            actualizarBotones(); // Actualizar el estilo de los botones
+        }
+
+        // Función para obtener la URL del mapa dependiendo de las selecciones
         function obtenerUrlMapa() {
             const baseUrl = "https://bc3lc.github.io/mapsTE/mapas_dinamicos/";
-            return `${baseUrl}map_${nivelAdministrativo}_${tipoMapa}_${submapaSeleccionado}.html`;
+
+            if (tipoMapa === 'distintivos') {
+                if (submapaSeleccionado === '0') {
+                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_0.html`;
+                }
+                if (submapaSeleccionado === 'eco') {
+                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_ECO.html`;
+                }
+                if (submapaSeleccionado === 'b') {
+                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_B.html`;
+                }
+                if (submapaSeleccionado === 'c') {
+                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_C.html`;
+                }
+                if (submapaSeleccionado === 'sin') {
+                    return `${baseUrl}map_${nivelAdministrativo}_sin_distintivo.html`;
+                }
+            }
+
+            if (tipoMapa === 'antiguedad') {
+                if (submapaSeleccionado === 'camiones') {
+                    return `${baseUrl}map_${nivelAdministrativo}_antiguedad_camiones.html`;
+                }
+                if (submapaSeleccionado === 'ciclomotores') {
+                    return `${baseUrl}map_${nivelAdministrativo}_antiguedad_ciclomotores.html`;
+                }
+                if (submapaSeleccionado === 'furgonetas') {
+                    return `${baseUrl}map_${nivelAdministrativo}_antiguedad_furgonetas.html`;
+                }
+                if (submapaSeleccionado === 'motocicletas') {
+                    return `${baseUrl}map_${nivelAdministrativo}_antiguedad_motocicletas.html`;
+                }
+                if (submapaSeleccionado === 'total') {
+                    return `${baseUrl}map_${nivelAdministrativo}_antiguedad_tot.html`;
+                }
+            }
+
+            if (tipoMapa === 'parque_pc') {
+                if (submapaSeleccionado === 'camiones') {
+                    return `${baseUrl}map_${nivelAdministrativo}_parque_camiones_pc.html`;
+                }
+                if (submapaSeleccionado === 'ciclomotores') {
+                    return `${baseUrl}map_${nivelAdministrativo}_parque_ciclomotores_pc.html`;
+                }
+                if (submapaSeleccionado === 'furgonetas') {
+                    return `${baseUrl}map_${nivelAdministrativo}_parque_furgonetas_pc.html`;
+                }
+                if (submapaSeleccionado === 'motocicletas') {
+                    return `${baseUrl}map_${nivelAdministrativo}_parque_motocicletas_pc.html`;
+                }
+                if (submapaSeleccionado === 'total') {
+                    return `${baseUrl}map_${nivelAdministrativo}_parque_pc.html`;
+                }
+            }
+
+            if (tipoMapa === 'censo_pc') {
+                if (submapaSeleccionado === 'total') {
+                    return `${baseUrl}map_${nivelAdministrativo}_censo_pc_total.html`;
+                }
+            }
+
+            return ''; // Si no se encuentra un mapa válido
         }
 
-        // Cargar mapa al inicio
-        window.onload = function() {
-            actualizarSubmapa();
-            cargarMapa();
-        };
-
-        // Función para cargar el mapa en el iframe
-        function cargarMapa() {
-            document.getElementById("mapaFrame").src = obtenerUrlMapa();
-        }
-
-        // Función para actualizar la selección de mapa
+        // Función para manejar la selección de un tipo de mapa
         function actualizarMapa(tipo) {
-            tipoMapa = tipo;
-            actualizarSubmapa();
-            cargarMapa();
+            tipoMapa = tipo; // Actualizamos el tipo de mapa
+            actualizarSubmapa(); // Actualizar submapas
+            cargarMapa(); // Recargar el mapa
         }
 
-        // Función para actualizar el nivel administrativo
+        // Función para manejar la selección de un nivel administrativo
         function actualizarNivel(nivel) {
-            nivelAdministrativo = nivel;
-            actualizarSubmapa();
-            cargarMapa();
+            nivelAdministrativo = nivel; // Actualizamos el nivel administrativo
+            actualizarSubmapa(); // Actualizar submapas según el tipo de mapa y nivel
+            cargarMapa(); // Recargar el mapa
         }
 
-        // Función para actualizar los submapas disponibles según el tipo de mapa seleccionado
+        // Actualizar los submapas disponibles según el tipo de mapa seleccionado
         function actualizarSubmapa() {
             const submapaContainer = document.getElementById("submapaContainer");
-            submapaContainer.innerHTML = '<h3>Seleccionar Submapa</h3>';
+            submapaContainer.innerHTML = '<h3>Seleccionar Submapa</h3>'; // Reiniciar contenido de submapa
 
-            let submapas = tipoMapa === 'distintivos' ? ['0', 'eco', 'b', 'c', 'sin']
-                        : tipoMapa === 'antiguedad' || tipoMapa === 'parque_pc' ? ['camiones', 'ciclomotores', 'furgonetas', 'motocicletas', 'total']
-                        : ['total'];
+            let submapas = [];
+            
+            // Definir los submapas según el tipo de mapa
+            if (tipoMapa === 'distintivos') {
+                submapas = ['0', 'eco', 'b', 'c', 'sin'];
+            }
+            else if (tipoMapa === 'antiguedad' || tipoMapa === 'parque_pc') {
+                submapas = ['camiones', 'ciclomotores', 'furgonetas', 'motocicletas', 'total'];
+            }
+            else if (tipoMapa === 'censo_pc') {
+                submapas = ['total'];
+            }
 
+            // Crear los botones de submapas
             submapas.forEach(submapa => {
-                let btn = document.createElement("button");
-                btn.innerText = submapa.toUpperCase();
-                btn.onclick = () => actualizarSubmapaSeleccionado(submapa);
+                const btn = document.createElement("button");
+                btn.innerText = `${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`;
+                btn.id = `submapa-${submapa}`;
+                btn.onclick = () => actualizarSubmapaSeleccionado(submapa); // Cada submapa también carga el mapa
                 submapaContainer.appendChild(btn);
             });
         }
 
-        // Función para actualizar la selección del submapa
+        // Actualizar el submapa seleccionado
         function actualizarSubmapaSeleccionado(submapa) {
             submapaSeleccionado = submapa;
-            cargarMapa();
+            cargarMapa(); // Recargar el mapa
         }
 
         // Función para expandir el mapa en una nueva pestaña
         function expandirMapa() {
-            window.open(document.getElementById("mapaFrame").src, "_blank");
+            let iframe = document.getElementById("mapaFrame");
+            const url = iframe.src;
+            window.open(url, "_blank");
         }
+
+        // Función para actualizar el estilo de los botones seleccionados
+        function actualizarBotones() {
+            // Restablecer todos los botones
+            document.querySelectorAll('.menu button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Resaltar los botones activos
+            document.getElementById(`mapa-${tipoMapa}`).classList.add('selected');
+            document.getElementById(`nivel-${nivelAdministrativo}`).classList.add('selected');
+            document.getElementById(`submapa-${submapaSeleccionado}`).classList.add('selected');
+        }
+
+        // Cargar mapa inicial al cargar la página
+        window.onload = () => {
+            actualizarSubmapa(); // Cargar submapas según el mapa predeterminado
+            cargarMapa(); // Cargar mapa predeterminado
+        };
     </script>
 
 </body>
