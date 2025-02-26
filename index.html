@@ -102,15 +102,15 @@
         function actualizarMapa(tipo) {
             tipoMapa = tipo; // Actualizamos el tipo de mapa
             marcarBotonSeleccionado(tipo, 'mapa'); // Marcar el botón seleccionado
-            actualizarSubmapa(); // Actualizar submapas
-            cargarMapa(); // Actualizar mapa, esto ahora es directo en cualquier clic
+            actualizarSubmapa(); // Actualizar submapas según el mapa
+            cargarMapa(); // Actualizar mapa
         }
 
         function actualizarNivel(nivel) {
             nivelAdministrativo = nivel; // Actualizamos el nivel
             marcarBotonSeleccionado(nivel, 'nivel'); // Marcar el botón seleccionado
             actualizarSubmapa(); // Actualizar submapas dependiendo del nivel
-            cargarMapa(); // Actualizar mapa, esto ahora es directo en cualquier clic
+            cargarMapa(); // Actualizar mapa
         }
 
         function actualizarSubmapa(submapa) {
@@ -118,7 +118,7 @@
                 submapaSeleccionado = submapa; // Actualizamos el submapa
             }
             marcarBotonSeleccionado(submapaSeleccionado, 'submapa'); // Marcar el botón seleccionado
-            cargarMapa(); // Actualizar mapa
+            cargarMapa(); // Solo cargar el mapa una vez
         }
 
         // Marcar el botón seleccionado en cada sección (mapa, nivel o submapa)
