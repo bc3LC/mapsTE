@@ -240,4 +240,17 @@
 
         // Función para expandir el mapa en una nueva pestaña
         function expandirMapa() {
-            let iframe = document.getElementById("map
+            let iframe = document.getElementById("mapaFrame");
+            const url = iframe.src;
+            window.open(url, "_blank");
+        }
+
+        // Cargar mapa inicial al cargar la página
+        window.onload = () => {
+            actualizarSubmapa(); // Cargar submapas según el mapa predeterminado
+            cargarMapa(); // Cargar mapa predeterminado
+        };
+    </script>
+
+</body>
+</html>
