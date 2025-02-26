@@ -95,47 +95,35 @@
 
     <script>
         let tipoMapa = '';
-        let nivelAdministrativo = 'ccaa'; // Por defecto es Comunidad Autónoma
+        let nivelAdministrativo = ''; // Eliminamos la asignación por defecto
         let submapaSeleccionado = '';
 
         // Al cargar un mapa, se actualizan los submapas disponibles
         function cargarMapa(tipo) {
             tipoMapa = tipo;
-            resetearBotonesMapa();
             document.getElementById(`btn${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`).classList.add('selected');
             actualizarSubmapa();  // Aquí es donde se actualizan los submapas
-            actualizarMapa(); // Actualizar el mapa después de elegir el tipo
+            if (nivelAdministrativo && submapaSeleccionado) {
+                actualizarMapa(); // Actualizar el mapa después de elegir el tipo, si ya se ha seleccionado un nivel y submapa
+            }
         }
 
         // Al seleccionar el nivel administrativo, se marca el botón seleccionado
         function cargarNivel(nivel) {
             nivelAdministrativo = nivel;
-            resetearBotonesNivel();
             document.getElementById(`btn${nivel.charAt(0).toUpperCase() + nivel.slice(1)}`).classList.add('selected');
-            actualizarMapa(); // Actualizar el mapa con el nivel seleccionado
+            if (tipoMapa && submapaSeleccionado) {
+                actualizarMapa(); // Actualizar el mapa con el nivel seleccionado, si ya se ha seleccionado un mapa y submapa
+            }
         }
 
         // Al seleccionar un submapa, se marca el botón seleccionado
         function cargarSubmapa(submapa) {
             submapaSeleccionado = submapa;
-            resetearBotonesSubmapa();
             document.getElementById(`btn${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`).classList.add('selected');
-            actualizarMapa(); // Actualizar el mapa con el submapa seleccionado
-        }
-
-        // Resetear todos los botones de mapas a su estado inicial
-        function resetearBotonesMapa() {
-            document.querySelectorAll('.menu button').forEach(button => button.classList.remove('selected'));
-        }
-
-        // Resetear los botones de nivel
-        function resetearBotonesNivel() {
-            document.querySelectorAll('#nivelesContainer button').forEach(button => button.classList.remove('selected'));
-        }
-
-        // Resetear los botones de submapa
-        function resetearBotonesSubmapa() {
-            document.querySelectorAll('#submapaContainer button').forEach(button => button.classList.remove('selected'));
+            if (tipoMapa && nivelAdministrativo) {
+                actualizarMapa(); // Actualizar el mapa con el submapa seleccionado, si ya se ha seleccionado un mapa y nivel
+            }
         }
 
         // Actualizar la lista de submapas en función del mapa seleccionado
