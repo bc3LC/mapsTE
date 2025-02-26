@@ -98,13 +98,13 @@
         let nivelAdministrativo = 'ccaa'; // Nivel predeterminado
         let submapaSeleccionado = '0'; // Submapa predeterminado
 
-        // Al cargar un mapa, se actualizan los submapas disponibles
+        // Cargar un nuevo mapa
         function cargarMapa(tipo) {
             tipoMapa = tipo;
             resetearBotones('mapa');  // Solo desmarcar botones de la sección de mapa
             document.getElementById(`btn${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`).classList.add('selected');
             actualizarSubmapa();  // Aquí es donde se actualizan los submapas
-            actualizarMapa(); // Actualiza el mapa cada vez que se selecciona un tipo de mapa
+            actualizarMapa(); // Actualiza el mapa
         }
 
         // Al seleccionar el nivel administrativo, se marca el botón seleccionado
@@ -112,7 +112,7 @@
             nivelAdministrativo = nivel;
             resetearBotones('nivel');  // Solo desmarcar botones de la sección de nivel
             document.getElementById(`btn${nivel.charAt(0).toUpperCase() + nivel.slice(1)}`).classList.add('selected');
-            actualizarMapa(); // Actualiza el mapa cada vez que se selecciona un nivel
+            actualizarMapa(); // Actualiza el mapa
         }
 
         // Al seleccionar un submapa, se marca el botón seleccionado
@@ -120,7 +120,7 @@
             submapaSeleccionado = submapa;
             resetearBotones('submapa');  // Solo desmarcar botones de la sección de submapa
             document.getElementById(`btn${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`).classList.add('selected');
-            actualizarMapa(); // Actualiza el mapa cada vez que se selecciona un submapa
+            actualizarMapa(); // Actualiza el mapa
         }
 
         // Resetear los botones de la sección correspondiente (mapa, nivel o submapa)
