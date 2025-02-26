@@ -4,43 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapas Interactivos</title>
-    <!-- Fuente Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
+
         body {
-            font-family: 'Outfit', sans-serif; /* Usando la fuente Outfit */
+            font-family: 'Outfit', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
             margin: 0;
-            background-color: #f4f4f4;
+            background: #F5F5F5;
         }
+
+        /* Estilos del bloque superior */
+        .header {
+            width: 100%;
+            background: #11302D;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.5em;
+            margin: 0;
+        }
+
+        .header p {
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        /* Cambios en el menú de botones */
         .menu {
             width: 100%;
-            background: rgb(17, 48, 45); /* Color RGB #11302D */
-            padding: 10px;
-            color: white;
+            background: #4EBF7B;
+            padding: 15px;
             display: flex;
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
         }
+
+        /* Estilos de los botones en el menú */
         .menu button {
-            background: #444;
+            background: #11302D;
             color: white;
+            font-family: 'Outfit', sans-serif;
             border: none;
-            padding: 10px;
+            padding: 10px 15px;
             cursor: pointer;
             transition: 0.3s;
+            border-radius: 5px;
         }
+
+        /* Botones seleccionados */
         .menu button.selected {
-            background: #4EBF7B; /* Color seleccionado en #4EBF7B */
-            color: white;
+            background: white;
+            color: #11302D;
         }
-        .menu button:hover {
-            background: #666;
-        }
+
+        /* Contenedor del mapa */
         .container {
             width: 90%;
             max-width: 1200px;
@@ -50,36 +75,50 @@
             align-items: center;
             position: relative;
         }
+
         iframe {
             width: 100%;
             height: 500px;
             border: none;
         }
+
+        /* Estilos para el botón de expandir y el texto de cita */
+        .map-controls {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+            padding: 5px 10px;
+        }
+
         .expand {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            padding: 8px;
-            background: #4EBF7B; /* Color de fondo para el botón "Expandir" */
+            padding: 8px 15px;
+            background: #4EBF7B;
             color: white;
             border: none;
             cursor: pointer;
-            transition: 0.3s;
+            font-family: 'Outfit', sans-serif;
+            border-radius: 5px;
+            font-size: 0.9em;
         }
-        .expand:hover {
-            background: #3f9e67; /* Un verde más oscuro para el hover */
-        }
-        .footer-text {
-            position: absolute;
-            bottom: 10px;
-            left: 90px;
-            font-size: 12px;
-            color: #333;
+
+        .citation {
+            font-size: 0.8em;
+            font-family: 'Outfit', sans-serif;
+            color: #555;
         }
     </style>
 </head>
 <body>
 
+    <!-- Bloque superior con título y descripción -->
+    <div class="header">
+        <h1>Composición del parque de vehículos y su antigüedad, y del censo de conductores (2023)</h1>
+        <p>Explotación gráfica de la base de datos de la DGT "Información sobre la composición del parque de vehículos y su antigüedad, y del censo de conductores. Datos consolidados."</p>
+    </div>
+
+    <!-- Bloque de selección de mapas y niveles -->
     <div class="menu">
         <!-- Botones para seleccionar el mapa -->
         <div>
@@ -105,10 +144,14 @@
         </div>
     </div>
 
+    <!-- Contenedor del mapa -->
     <div class="container">
         <iframe id="mapaFrame" src=""></iframe>
-        <button class="expand" onclick="expandirMapa()">🔍 Expandir</button>
-        <div class="footer-text">(C) BC2 Low Carbon group. Please citation required if used.</div>
+        
+        <div class="map-controls">
+            <button class="expand" onclick="expandirMapa()">🔍 Expandir</button>
+            <span class="citation">(C) BC2 Low Carbon group. Please cite if used.</span>
+        </div>
     </div>
 
     <script>
@@ -116,152 +159,70 @@
         let nivelAdministrativo = 'ccaa'; // Nivel predeterminado
         let submapaSeleccionado = '0'; // Submapa predeterminado
 
-        // Función que actualiza la URL del mapa y recarga el iframe
         function cargarMapa() {
             const url = obtenerUrlMapa();
-            document.getElementById("mapaFrame").src = url; // Recargar el mapa al cambiar cualquier sección
-            actualizarBotones(); // Actualizar el estilo de los botones
+            document.getElementById("mapaFrame").src = url;
+            actualizarBotones();
         }
 
-        // Función para obtener la URL del mapa dependiendo de las selecciones
         function obtenerUrlMapa() {
             const baseUrl = "https://bc3lc.github.io/mapsTE/mapas_dinamicos/";
-
-            if (tipoMapa === 'distintivos') {
-                if (submapaSeleccionado === '0') {
-                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_0.html`;
-                }
-                if (submapaSeleccionado === 'eco') {
-                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_ECO.html`;
-                }
-                if (submapaSeleccionado === 'b') {
-                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_B.html`;
-                }
-                if (submapaSeleccionado === 'c') {
-                    return `${baseUrl}map_${nivelAdministrativo}_distintivo_C.html`;
-                }
-                if (submapaSeleccionado === 'sin') {
-                    return `${baseUrl}map_${nivelAdministrativo}_sin_distintivo.html`;
-                }
-            }
-
-            if (tipoMapa === 'antiguedad') {
-                if (submapaSeleccionado === 'camiones') {
-                    return `${baseUrl}map_${nivelAdministrativo}_antiguedad_camiones.html`;
-                }
-                if (submapaSeleccionado === 'ciclomotores') {
-                    return `${baseUrl}map_${nivelAdministrativo}_antiguedad_ciclomotores.html`;
-                }
-                if (submapaSeleccionado === 'furgonetas') {
-                    return `${baseUrl}map_${nivelAdministrativo}_antiguedad_furgonetas.html`;
-                }
-                if (submapaSeleccionado === 'motocicletas') {
-                    return `${baseUrl}map_${nivelAdministrativo}_antiguedad_motocicletas.html`;
-                }
-                if (submapaSeleccionado === 'total') {
-                    return `${baseUrl}map_${nivelAdministrativo}_antiguedad_tot.html`;
-                }
-            }
-
-            if (tipoMapa === 'parque_pc') {
-                if (submapaSeleccionado === 'camiones') {
-                    return `${baseUrl}map_${nivelAdministrativo}_parque_camiones_pc.html`;
-                }
-                if (submapaSeleccionado === 'ciclomotores') {
-                    return `${baseUrl}map_${nivelAdministrativo}_parque_ciclomotores_pc.html`;
-                }
-                if (submapaSeleccionado === 'furgonetas') {
-                    return `${baseUrl}map_${nivelAdministrativo}_parque_furgonetas_pc.html`;
-                }
-                if (submapaSeleccionado === 'motocicletas') {
-                    return `${baseUrl}map_${nivelAdministrativo}_parque_motocicletas_pc.html`;
-                }
-                if (submapaSeleccionado === 'total') {
-                    return `${baseUrl}map_${nivelAdministrativo}_parque_pc.html`;
-                }
-            }
-
-            if (tipoMapa === 'censo_pc') {
-                if (submapaSeleccionado === 'total') {
-                    return `${baseUrl}map_${nivelAdministrativo}_censo_pc_total.html`;
-                }
-            }
-
-            return ''; // Si no se encuentra un mapa válido
+            return `${baseUrl}map_${nivelAdministrativo}_${tipoMapa}_${submapaSeleccionado}.html`;
         }
 
-        // Función para manejar la selección de un tipo de mapa
         function actualizarMapa(tipo) {
-            tipoMapa = tipo; // Actualizamos el tipo de mapa
-            actualizarSubmapa(); // Actualizar submapas
-            cargarMapa(); // Recargar el mapa
+            tipoMapa = tipo;
+            actualizarSubmapa();
+            cargarMapa();
         }
 
-        // Función para manejar la selección de un nivel administrativo
         function actualizarNivel(nivel) {
-            nivelAdministrativo = nivel; // Actualizamos el nivel administrativo
-            actualizarSubmapa(); // Actualizar submapas según el tipo de mapa y nivel
-            cargarMapa(); // Recargar el mapa
+            nivelAdministrativo = nivel;
+            actualizarSubmapa();
+            cargarMapa();
         }
 
-        // Actualizar los submapas disponibles según el tipo de mapa seleccionado
         function actualizarSubmapa() {
             const submapaContainer = document.getElementById("submapaContainer");
-            submapaContainer.innerHTML = '<h3>Seleccionar Submapa</h3>'; // Reiniciar contenido de submapa
-
+            submapaContainer.innerHTML = '<h3>Seleccionar Submapa</h3>';
             let submapas = [];
-            
-            // Definir los submapas según el tipo de mapa
+
             if (tipoMapa === 'distintivos') {
                 submapas = ['0', 'eco', 'b', 'c', 'sin'];
-            }
-            else if (tipoMapa === 'antiguedad' || tipoMapa === 'parque_pc') {
+            } else if (tipoMapa === 'antiguedad' || tipoMapa === 'parque_pc') {
                 submapas = ['camiones', 'ciclomotores', 'furgonetas', 'motocicletas', 'total'];
-            }
-            else if (tipoMapa === 'censo_pc') {
+            } else if (tipoMapa === 'censo_pc') {
                 submapas = ['total'];
             }
 
-            // Crear los botones de submapas
             submapas.forEach(submapa => {
                 const btn = document.createElement("button");
                 btn.innerText = `${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`;
                 btn.id = `submapa-${submapa}`;
-                btn.onclick = () => actualizarSubmapaSeleccionado(submapa); // Cada submapa también carga el mapa
+                btn.onclick = () => actualizarSubmapaSeleccionado(submapa);
                 submapaContainer.appendChild(btn);
             });
         }
 
-        // Actualizar el submapa seleccionado
         function actualizarSubmapaSeleccionado(submapa) {
             submapaSeleccionado = submapa;
-            cargarMapa(); // Recargar el mapa
+            cargarMapa();
         }
 
-        // Función para expandir el mapa en una nueva pestaña
         function expandirMapa() {
-            let iframe = document.getElementById("mapaFrame");
-            const url = iframe.src;
-            window.open(url, "_blank");
+            window.open(document.getElementById("mapaFrame").src, "_blank");
         }
 
-        // Función para actualizar el estilo de los botones seleccionados
         function actualizarBotones() {
-            // Restablecer todos los botones
-            document.querySelectorAll('.menu button').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-
-            // Resaltar los botones activos
+            document.querySelectorAll('.menu button').forEach(btn => btn.classList.remove('selected'));
             document.getElementById(`mapa-${tipoMapa}`).classList.add('selected');
             document.getElementById(`nivel-${nivelAdministrativo}`).classList.add('selected');
-            document.getElementById(`submapa-${submapaSeleccionado}`).classList.add('selected');
+            document.getElementById(`submapa-${submapaSeleccionado}`)?.classList.add('selected');
         }
 
-        // Cargar mapa inicial al cargar la página
         window.onload = () => {
-            actualizarSubmapa(); // Cargar submapas según el mapa predeterminado
-            cargarMapa(); // Cargar mapa predeterminado
+            actualizarSubmapa();
+            cargarMapa();
         };
     </script>
 
