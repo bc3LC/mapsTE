@@ -103,7 +103,7 @@
             tipoMapa = tipo;
             resetearBotonesMapa();
             document.getElementById(`btn${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`).classList.add('selected');
-            actualizarSubmapa();
+            actualizarSubmapa();  // Aquí es donde se actualizan los submapas
             actualizarMapa(); // Actualizar el mapa después de elegir el tipo
         }
 
@@ -143,43 +143,26 @@
             const submapaContainer = document.getElementById("submapaContainer");
             submapaContainer.innerHTML = '<h3>Seleccionar Submapa</h3>'; // Reiniciar el contenido de submapa
 
+            let submapas = [];
+            
+            // Definir los submapas según el tipo de mapa
             if (tipoMapa === 'distintivos') {
-                // Distintivos ambientales
-                const submapas = ['0', 'eco', 'b', 'c', 'sin'];
-                submapas.forEach(submapa => {
-                    const btn = document.createElement("button");
-                    btn.innerText = `Distintivo ${submapa === '0' ? '0' : submapa.toUpperCase()}`;
-                    btn.onclick = () => cargarSubmapa(submapa);
-                    submapaContainer.appendChild(btn);
-                });
+                submapas = ['0', 'eco', 'b', 'c', 'sin'];
             }
-            else if (tipoMapa === 'antiguedad') {
-                // Antigüedad media
-                const submapas = ['camiones', 'ciclomotores', 'furgonetas', 'motocicletas', 'total'];
-                submapas.forEach(submapa => {
-                    const btn = document.createElement("button");
-                    btn.innerText = `${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`;
-                    btn.onclick = () => cargarSubmapa(submapa);
-                    submapaContainer.appendChild(btn);
-                });
-            }
-            else if (tipoMapa === 'parque_pc') {
-                // Parque por cápita
-                const submapas = ['camiones', 'ciclomotores', 'furgonetas', 'motocicletas', 'total'];
-                submapas.forEach(submapa => {
-                    const btn = document.createElement("button");
-                    btn.innerText = `${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`;
-                    btn.onclick = () => cargarSubmapa(submapa);
-                    submapaContainer.appendChild(btn);
-                });
+            else if (tipoMapa === 'antiguedad' || tipoMapa === 'parque_pc') {
+                submapas = ['camiones', 'ciclomotores', 'furgonetas', 'motocicletas', 'total'];
             }
             else if (tipoMapa === 'censo_pc') {
-                // Vehículos censados por cápita (solo un submapa)
-                const btn = document.createElement("button");
-                btn.innerText = 'Total';
-                btn.onclick = () => cargarSubmapa('total');
-                submapaContainer.appendChild(btn);
+                submapas = ['total'];
             }
+
+            // Crear los botones de submapas
+            submapas.forEach(submapa => {
+                const btn = document.createElement("button");
+                btn.innerText = `${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`;
+                btn.onclick = () => cargarSubmapa(submapa);
+                submapaContainer.appendChild(btn);
+            });
         }
 
         // Función para obtener la URL del mapa dependiendo de las selecciones
