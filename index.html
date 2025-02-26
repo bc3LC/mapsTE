@@ -25,7 +25,7 @@
             width: 100%;
             background: #11302D;
             color: white;
-            padding: 15px;
+            padding: 10px; /* Reducido de 15px a 10px */
             text-align: center;
         }
 
@@ -33,11 +33,11 @@
         .menu {
             width: 100%;
             background: #4EBF7B;
-            padding: 10px;
+            padding: 8px; /* Reducido de 10px a 8px */
             color: white;
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 10px; /* Reducido el espacio entre elementos */
             flex-wrap: wrap;
         }
 
@@ -111,7 +111,6 @@
             font-size: 12px;
             color: #333;
         }
-
     </style>
 </head>
 <body>
@@ -124,21 +123,19 @@
 
     <!-- Menú con los botones para seleccionar el mapa, nivel y submapa -->
     <div class="menu">
-        <!-- Botones para seleccionar el tipo de mapa -->
         <div>
             <h3>Seleccionar Mapa</h3>
-            <button id="mapa-distintivos" onclick="actualizarMapa('distintivos')">Distintivos Ambientales</button>
-            <button id="mapa-antiguedad" onclick="actualizarMapa('antiguedad')">Antigüedad</button>
-            <button id="mapa-parque_pc" onclick="actualizarMapa('parque_pc')">Parque por Cápita</button>
-            <button id="mapa-censo_pc" onclick="actualizarMapa('censo_pc')">Vehículos Censados por Cápita</button>
+            <button onclick="actualizarMapa('distintivos')">Distintivos Ambientales</button>
+            <button onclick="actualizarMapa('antiguedad')">Antigüedad</button>
+            <button onclick="actualizarMapa('parque_pc')">Parque por Cápita</button>
+            <button onclick="actualizarMapa('censo_pc')">Vehículos Censados por Cápita</button>
         </div>
 
-        <!-- Botones para seleccionar el nivel administrativo -->
         <div>
             <h3>Seleccionar Nivel Administrativo</h3>
-            <button id="nivel-ccaa" onclick="actualizarNivel('ccaa')">Comunidad Autónoma</button>
-            <button id="nivel-prov" onclick="actualizarNivel('prov')">Provincia</button>
-            <button id="nivel-muni" onclick="actualizarNivel('muni')">Municipio</button>
+            <button onclick="actualizarNivel('ccaa')">Comunidad Autónoma</button>
+            <button onclick="actualizarNivel('prov')">Provincia</button>
+            <button onclick="actualizarNivel('muni')">Municipio</button>
         </div>
 
         <!-- Contenedor para los botones de submapas (se generarán dinámicamente) -->
@@ -152,7 +149,7 @@
         <iframe id="mapaFrame" src=""></iframe>
         <div class="expand-container">
             <button class="expand" onclick="expandirMapa()">🔍 Expandir</button>
-            <div class="footer-text">(C) BC2 Low Carbon group. Please citation required if used.</div>
+            <div class="footer-text">(C) BC3 Low Carbon group. Please citation required if used.</div>
         </div>
     </div>
 
@@ -162,19 +159,19 @@
         let nivelAdministrativo = 'ccaa';
         let submapaSeleccionado = '0';
 
-        // Cargar mapa al inicio
-        window.onload = function() {
-            actualizarSubmapa();
-            cargarMapa();
-        };
-
         // Función para obtener la URL del mapa según las selecciones
         function obtenerUrlMapa() {
             const baseUrl = "https://bc3lc.github.io/mapsTE/mapas_dinamicos/";
             return `${baseUrl}map_${nivelAdministrativo}_${tipoMapa}_${submapaSeleccionado}.html`;
         }
 
-        // Cargar el mapa en el iframe
+        // Cargar mapa al inicio
+        window.onload = function() {
+            actualizarSubmapa();
+            cargarMapa();
+        };
+
+        // Función para cargar el mapa en el iframe
         function cargarMapa() {
             document.getElementById("mapaFrame").src = obtenerUrlMapa();
         }
