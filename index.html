@@ -67,18 +67,18 @@
         <!-- Botones para seleccionar el mapa -->
         <div>
             <h3>Seleccionar Mapa</h3>
-            <button onclick="actualizarMapa('distintivos')">Distintivos Ambientales</button>
-            <button onclick="actualizarMapa('antiguedad')">Antigüedad</button>
-            <button onclick="actualizarMapa('parque_pc')">Parque por Cápita</button>
-            <button onclick="actualizarMapa('censo_pc')">Vehículos Censados por Cápita</button>
+            <button id="mapa-distintivos" onclick="actualizarMapa('distintivos')">Distintivos Ambientales</button>
+            <button id="mapa-antiguedad" onclick="actualizarMapa('antiguedad')">Antigüedad</button>
+            <button id="mapa-parque_pc" onclick="actualizarMapa('parque_pc')">Parque por Cápita</button>
+            <button id="mapa-censo_pc" onclick="actualizarMapa('censo_pc')">Vehículos Censados por Cápita</button>
         </div>
 
         <!-- Botones para seleccionar el nivel administrativo -->
         <div>
             <h3>Seleccionar Nivel Administrativo</h3>
-            <button onclick="actualizarNivel('ccaa')">Comunidad Autónoma</button>
-            <button onclick="actualizarNivel('prov')">Provincia</button>
-            <button onclick="actualizarNivel('muni')">Municipio</button>
+            <button id="nivel-ccaa" onclick="actualizarNivel('ccaa')">Comunidad Autónoma</button>
+            <button id="nivel-prov" onclick="actualizarNivel('prov')">Provincia</button>
+            <button id="nivel-muni" onclick="actualizarNivel('muni')">Municipio</button>
         </div>
 
         <!-- Botones para seleccionar el submapa -->
@@ -102,6 +102,7 @@
         function cargarMapa() {
             const url = obtenerUrlMapa();
             document.getElementById("mapaFrame").src = url; // Recargar el mapa al cambiar cualquier sección
+            actualizarBotones(); // Actualizar el estilo de los botones
         }
 
         // Función para obtener la URL del mapa dependiendo de las selecciones
@@ -207,6 +208,7 @@
             submapas.forEach(submapa => {
                 const btn = document.createElement("button");
                 btn.innerText = `${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`;
+                btn.id = `submapa-${submapa}`;
                 btn.onclick = () => actualizarSubmapaSeleccionado(submapa); // Cada submapa también carga el mapa
                 submapaContainer.appendChild(btn);
             });
@@ -223,6 +225,19 @@
             let iframe = document.getElementById("mapaFrame");
             const url = iframe.src;
             window.open(url, "_blank");
+        }
+
+        // Función para actualizar el estilo de los botones seleccionados
+        function actualizarBotones() {
+            // Restablecer todos los botones
+            document.querySelectorAll('.menu button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Resaltar los botones activos
+            document.getElementById(`mapa-${tipoMapa}`).classList.add('selected');
+            document.getElementById(`nivel-${nivelAdministrativo}`).classList.add('selected');
+            document.getElementById(`submapa-${submapaSeleccionado}`).classList.add('selected');
         }
 
         // Cargar mapa inicial al cargar la página
