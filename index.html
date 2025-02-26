@@ -101,7 +101,7 @@
         // Al cargar un mapa, se actualizan los submapas disponibles
         function cargarMapa(tipo) {
             tipoMapa = tipo;
-            resetearBotonesMapa();
+            resetearBotones('mapa');  // Solo desmarcar botones de la sección de mapa
             document.getElementById(`btn${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`).classList.add('selected');
             actualizarSubmapa();  // Aquí es donde se actualizan los submapas
             actualizarMapa(); // Actualizar el mapa después de elegir el tipo
@@ -110,7 +110,7 @@
         // Al seleccionar el nivel administrativo, se marca el botón seleccionado
         function cargarNivel(nivel) {
             nivelAdministrativo = nivel;
-            resetearBotonesNivel();
+            resetearBotones('nivel');  // Solo desmarcar botones de la sección de nivel
             document.getElementById(`btn${nivel.charAt(0).toUpperCase() + nivel.slice(1)}`).classList.add('selected');
             actualizarMapa(); // Actualizar el mapa con el nivel seleccionado
         }
@@ -118,24 +118,30 @@
         // Al seleccionar un submapa, se marca el botón seleccionado
         function cargarSubmapa(submapa) {
             submapaSeleccionado = submapa;
-            resetearBotonesSubmapa();
+            resetearBotones('submapa');  // Solo desmarcar botones de la sección de submapa
             document.getElementById(`btn${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`).classList.add('selected');
             actualizarMapa(); // Actualizar el mapa con el submapa seleccionado
         }
 
-        // Resetear todos los botones de mapas a su estado inicial
-        function resetearBotonesMapa() {
-            document.querySelectorAll('.menu button').forEach(button => button.classList.remove('selected'));
-        }
-
-        // Resetear los botones de nivel
-        function resetearBotonesNivel() {
-            document.querySelectorAll('#nivelesContainer button').forEach(button => button.classList.remove('selected'));
-        }
-
-        // Resetear los botones de submapa
-        function resetearBotonesSubmapa() {
-            document.querySelectorAll('#submapaContainer button').forEach(button => button.classList.remove('selected'));
+        // Resetear los botones de la sección correspondiente (mapa, nivel o submapa)
+        function resetearBotones(seccion) {
+            let buttons;
+            if (seccion === 'mapa') {
+                buttons = document.querySelectorAll('.menu button');
+                buttons.forEach(button => {
+                    if (button.parentElement.querySelector('h3')) {
+                        button.classList.remove('selected');
+                    }
+                });
+            }
+            else if (seccion === 'nivel') {
+                buttons = document.querySelectorAll('#nivelesContainer button');
+                buttons.forEach(button => button.classList.remove('selected'));
+            }
+            else if (seccion === 'submapa') {
+                buttons = document.querySelectorAll('#submapaContainer button');
+                buttons.forEach(button => button.classList.remove('selected'));
+            }
         }
 
         // Actualizar la lista de submapas en función del mapa seleccionado
