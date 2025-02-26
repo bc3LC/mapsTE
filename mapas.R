@@ -734,8 +734,6 @@ remove("data")
 # Set working domain at the start again 
 setwd(path)
 
-
-
 # Lista de variables
 variables <- c("censo_pc", "parque_pc", "parque_ciclomotores_pc", "parque_motocicletas_pc", 
                "parque_turismos_pc", "parque_furgonetas_pc", "parque_camiones_pc", 
@@ -766,19 +764,22 @@ titulos <- c(
   "distintivo_0"                 = "Prevalencia de vehículos con Distintivo 0"
 )
 
-# Función para obtener los breaks con comprobación (to avoid unique breaks)
 get_breaks <- function(data, n_bins = 6) {
   
   # Calcular los percentiles
-  breaks <- quantile(data, probs = seq(0, 1, length.out = n_bins), na.rm = TRUE)
+  breaks <- quantile(data, probs = seq(0, 1, length.out = n_bins + 1), na.rm = TRUE)
   
-  # Si los breaks no son únicos, usar 'pretty' para generar los intervalos
+  # Si los breaks no son únicos, forzar exactamente 6 intervalos con 'pretty'
   if (length(unique(breaks)) != length(breaks)) {
-    breaks <- pretty(data, n_bins)
+    breaks <- unique(pretty(data, n_bins))
+    if (length(breaks) > (n_bins + 1)) {
+      breaks <- breaks[seq(1, length(breaks), length.out = (n_bins + 1))]
+    }
   }
   
   return(breaks)
 }
+
 
 # Modificar la leyenda para el último nivel
 custom_labels <- function(breaks) {
@@ -806,9 +807,10 @@ for (var in variables) {
   # Loop por niveles administrativos
   for (nivel in c("ccaa", "prov", "muni")) {
     
-    # Determinar si la variable es porcentaje o años
     unidad <- ifelse(grepl("antiguedad", var), " años", 
-                     ifelse(grepl("censo", var), "", " %"))
+                     ifelse(grepl("pc", var), " per cápita", 
+                            ifelse(grepl("censo", var), "", " %")))
+    
     
     # Formatear título
     var_titulo <- gsub("_", " ", var)
@@ -856,7 +858,7 @@ for (var in variables) {
       addPolygons(
         fillColor   = ~pal(merge_nivel[[var]]),
         fillOpacity = 0.7,
-        weight      = 0.5,
+        weight      = 0.4,
         opacity     = 1,
         color       = "white",
         dashArray   = "3",
@@ -920,3 +922,4 @@ for (var in variables) {
                selfcontained = TRUE)
   }
 }
+
