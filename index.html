@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapas Interactivos</title>
+    <!-- Fuente Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
-
         body {
             font-family: 'Outfit', sans-serif;
             display: flex;
@@ -14,7 +14,7 @@
             align-items: center;
             text-align: center;
             margin: 0;
-            background: #F5F5F5;
+            background-color: #f4f4f4;
         }
 
         /* Bloque superior con título y descripción */
@@ -42,17 +42,18 @@
             background: #4EBF7B;
             padding: 15px;
             display: flex;
+            align-items: center;
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
         }
 
         .menu button {
+            font-family: 'Outfit', sans-serif;
             background: #11302D;
             color: white;
-            font-family: 'Outfit', sans-serif;
             border: none;
-            padding: 10px 15px;
+            padding: 10px;
             cursor: pointer;
             transition: 0.3s;
             border-radius: 5px;
@@ -81,30 +82,35 @@
         }
 
         /* Botón de expandir y texto de cita */
-        .map-controls {
-            width: 100%;
+        .expand-container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-top: 5px;
+            justify-content: start;
+            width: 100%;
+            margin-top: 10px;
             padding: 5px 10px;
         }
 
         .expand {
+            font-family: 'Outfit', sans-serif;
             padding: 8px 15px;
             background: #4EBF7B;
             color: white;
             border: none;
             cursor: pointer;
-            font-family: 'Outfit', sans-serif;
             border-radius: 5px;
-            font-size: 0.9em;
+            transition: 0.3s;
         }
 
-        .citation {
-            font-size: 0.8em;
+        .expand:hover {
+            background: #3f9e67;
+        }
+
+        .footer-text {
+            margin-left: 20px;
+            font-size: 12px;
             font-family: 'Outfit', sans-serif;
-            color: #555;
+            color: #333;
         }
     </style>
 </head>
@@ -118,21 +124,59 @@
 
     <!-- Bloque de botones -->
     <div class="menu">
-        <!-- Aquí se mantienen los botones y su lógica original -->
+        <button id="mapa-distintivos" onclick="actualizarMapa('distintivos')">Distintivos Ambientales</button>
+        <button id="mapa-antiguedad" onclick="actualizarMapa('antiguedad')">Antigüedad</button>
+        <button id="mapa-parque_pc" onclick="actualizarMapa('parque_pc')">Parque por Cápita</button>
+        <button id="mapa-censo_pc" onclick="actualizarMapa('censo_pc')">Vehículos Censados por Cápita</button>
     </div>
 
     <!-- Contenedor del mapa -->
     <div class="container">
         <iframe id="mapaFrame" src=""></iframe>
-        
-        <div class="map-controls">
+        <div class="expand-container">
             <button class="expand" onclick="expandirMapa()">🔍 Expandir</button>
-            <span class="citation">(C) BC2 Low Carbon group. Please cite if used.</span>
+            <div class="footer-text">(C) BC2 Low Carbon group. Please citation required if used.</div>
         </div>
     </div>
 
     <script>
-        // No se cambia nada del código que maneja los mapas, solo se mantienen los estilos nuevos
+        let tipoMapa = 'distintivos';
+        let nivelAdministrativo = 'ccaa';
+        let submapaSeleccionado = '0';
+
+        function cargarMapa() {
+            const url = obtenerUrlMapa();
+            document.getElementById("mapaFrame").src = url;
+            actualizarBotones();
+        }
+
+        function obtenerUrlMapa() {
+            const baseUrl = "https://bc3lc.github.io/mapsTE/mapas_dinamicos/";
+            if (tipoMapa === 'distintivos') {
+                return `${baseUrl}map_${nivelAdministrativo}_distintivo_${submapaSeleccionado}.html`;
+            }
+            return '';
+        }
+
+        function actualizarMapa(tipo) {
+            tipoMapa = tipo;
+            cargarMapa();
+        }
+
+        function expandirMapa() {
+            let iframe = document.getElementById("mapaFrame");
+            const url = iframe.src;
+            window.open(url, "_blank");
+        }
+
+        function actualizarBotones() {
+            document.querySelectorAll('.menu button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.getElementById(`mapa-${tipoMapa}`).classList.add('selected');
+        }
+
+        window.onload = cargarMapa;
     </script>
 
 </body>
