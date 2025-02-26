@@ -25,8 +25,8 @@
             width: 100%;
             background: #11302D;
             color: white;
-            height: 60px; 
-            padding: 4px;
+            height: 300px; 
+            padding: 2px;
             box-sizing: border-box;
             text-align: center;
         }
@@ -35,13 +35,13 @@
         .menu {
             width: 100%;
             background: #4EBF7B;
-            height: 60px; 
-            padding: 4px;
+            height: 300px; 
+            padding: 2px;
             box-sizing: border-box;
             color: white;
             display: flex;
             justify-content: center;
-            gap: 15px; 
+            gap: 30px; 
             flex-wrap: wrap;
         }
 
@@ -87,12 +87,12 @@
         /* Contenedor del botón de expandir y el texto de copyright */
         .expand-container {
             display: flex;
-            align-items: center;
+            align-items: center; /* Alinea verticalmente el contenido */
             justify-content: start;
             width: 100%;
             margin-top: 30px;
         }
-
+        
         /* Botón para expandir el mapa */
         .expand {
             font-family: 'Outfit', sans-serif;
@@ -102,16 +102,17 @@
             border: none;
             cursor: pointer;
             transition: 0.3s;
-            margin-left: 10px;
+            margin-right: 10px; /* Ajusté a "margin-right" para darle espacio al texto */
         }
-
+        
+        /* Hover del botón */
         .expand:hover {
             background: #3f9e67;
         }
-
+        
         /* Texto de copyright */
         .footer-text {
-            margin-left: 20px;
+            margin-left: 0; /* Elimina el margen izquierdo extra */
             font-size: 12px;
             color: #333;
         }
