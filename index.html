@@ -31,6 +31,10 @@
             cursor: pointer;
             transition: 0.3s;
         }
+        .menu button.selected {
+            background: white;
+            color: black;
+        }
         .menu button:hover {
             background: #666;
         }
@@ -71,22 +75,35 @@
     <div class="menu">
         <div>
             <h3>Seleccionar Mapa</h3>
-            <button onclick="cargarMapa('distintivos')">Distintivos ambientales</button>
-            <button onclick="cargarMapa('antiguedad')">Antigüedad media</button>
-            <button onclick="cargarMapa('parque_pc')">Parque por cápita</button>
-            <button onclick="cargarMapa('censo_pc')">Vehículos censados por cápita</button>
+            <button onclick="cargarMapa('distintivos')" id="btnDistintivos">Distintivos ambientales</button>
+            <button onclick="cargarMapa('antiguedad')" id="btnAntiguedad">Antigüedad</button>
+            <button onclick="cargarMapa('parque_pc')" id="btnParque">Parque por cápita</button>
+            <button onclick="cargarMapa('censo_pc')" id="btnCenso">Vehículos censados por cápita</button>
         </div>
 
         <div id="nivelesContainer" style="display: none;">
             <h3>Seleccionar Nivel Administrativo</h3>
-            <button onclick="cargarNivel('ccaa')">Comunidad Autónoma</button>
-            <button onclick="cargarNivel('provincia')">Provincia</button>
-            <button onclick="cargarNivel('municipio')">Municipio</button>
+            <button onclick="cargarNivel('ccaa')" id="btnCCAA">Comunidad Autónoma</button>
+            <button onclick="cargarNivel('provincia')" id="btnProvincia">Provincia</button>
+            <button onclick="cargarNivel('municipio')" id="btnMunicipio">Municipio</button>
         </div>
 
         <div id="submapaContainer" style="display: none;">
             <h3>Seleccionar Submapa</h3>
-            <!-- Botones de submapas se agregarán dinámicamente -->
+            <!-- Antigüedad -->
+            <button onclick="cargarSubmapa('camiones')" id="btnCamiones">Camiones</button>
+            <button onclick="cargarSubmapa('ciclomotores')" id="btnCiclomotores">Ciclomotores</button>
+            <button onclick="cargarSubmapa('furgonetas')" id="btnFurgonetas">Furgonetas</button>
+            <button onclick="cargarSubmapa('motocicletas')" id="btnMotocicletas">Motocicletas</button>
+            <button onclick="cargarSubmapa('total')" id="btnTotal">Total</button>
+
+            <!-- Parque por Cápita -->
+            <button onclick="cargarSubmapa('camiones_pc')" id="btnCamionesPC">Camiones</button>
+            <button onclick="cargarSubmapa('ciclomotores_pc')" id="btnCiclomotoresPC">Ciclomotores</button>
+            <button onclick="cargarSubmapa('furgonetas_pc')" id="btnFurgonetasPC">Furgonetas</button>
+            <button onclick="cargarSubmapa('motocicletas_pc')" id="btnMotocicletasPC">Motocicletas</button>
+            <button onclick="cargarSubmapa('turismos_pc')" id="btnTurismosPC">Turismos</button>
+            <button onclick="cargarSubmapa('total_pc')" id="btnTotalPC">Total</button>
         </div>
     </div>
 
@@ -100,83 +117,45 @@
         let nivelAdministrativo = 'ccaa'; // Por defecto es Comunidad Autónoma
         let submapaSeleccionado = '';
 
-        // Función para cargar el mapa según la categoría seleccionada
         function cargarMapa(tipo) {
             tipoMapa = tipo;
             document.getElementById("nivelesContainer").style.display = 'block'; // Mostrar los botones para seleccionar el nivel administrativo
             document.getElementById("submapaContainer").style.display = 'block'; // Mostrar los botones para seleccionar submapa
-            actualizarSubmapas(); // Actualizar los submapas según la categoría seleccionada
+            resetearBotonesMapa();
             actualizarMapa(); // Actualizar el mapa después de elegir el tipo
         }
 
-        // Función para cargar el nivel administrativo
         function cargarNivel(nivel) {
             nivelAdministrativo = nivel;
+            resetearBotonesNivel();
+            document.getElementById(`btn${nivel.charAt(0).toUpperCase() + nivel.slice(1)}`).classList.add('selected');
             actualizarMapa(); // Actualizar el mapa con el nivel seleccionado
         }
 
-        // Función para cargar el submapa
         function cargarSubmapa(submapa) {
             submapaSeleccionado = submapa;
+            resetearBotonesSubmapa();
+            document.getElementById(`btn${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`).classList.add('selected');
             actualizarMapa(); // Actualizar el mapa con el submapa seleccionado
         }
 
-        // Función para actualizar los submapas según la categoría seleccionada
-        function actualizarSubmapas() {
-            const submapaContainer = document.getElementById("submapaContainer");
-            submapaContainer.innerHTML = "<h3>Seleccionar Submapa</h3>"; // Limpiar los submapas anteriores
-
-            let submapas = [];
-            if (tipoMapa === 'distintivos') {
-                submapas = ['0', 'eco', 'b', 'c', 'sin'];
-            } else if (tipoMapa === 'antiguedad') {
-                submapas = ['camiones', 'ciclomotores', 'furgonetas', 'motocicletas', 'total'];
-            } else if (tipoMapa === 'parque_pc') {
-                submapas = ['camiones_pc', 'ciclomotores_pc', 'furgonetas_pc', 'motocicletas_pc', 'total_pc', 'turismos_pc'];
-            } else if (tipoMapa === 'censo_pc') {
-                submapas = ['censo_pc'];
-            }
-
-            // Agregar los botones correspondientes a los submapas
-            submapas.forEach(function(submapa) {
-                const btn = document.createElement("button");
-                btn.textContent = getNombreSubmapa(submapa);
-                btn.onclick = function() { cargarSubmapa(submapa); };
-                submapaContainer.appendChild(btn);
-            });
+        function resetearBotonesMapa() {
+            document.querySelectorAll('.menu button').forEach(button => button.classList.remove('selected'));
         }
 
-        // Función para obtener el nombre del submapa en formato legible
-        function getNombreSubmapa(submapa) {
-            const nombres = {
-                '0': 'Distintivo 0',
-                'eco': 'Distintivo ECO',
-                'b': 'Distintivo B',
-                'c': 'Distintivo C',
-                'sin': 'Sin Distintivo',
-                'camiones': 'Antigüedad Camiones',
-                'ciclomotores': 'Antigüedad Ciclomotores',
-                'furgonetas': 'Antigüedad Furgonetas',
-                'motocicletas': 'Antigüedad Motocicletas',
-                'total': 'Antigüedad Total',
-                'camiones_pc': 'Parque Camiones por Cápita',
-                'ciclomotores_pc': 'Parque Ciclomotores por Cápita',
-                'furgonetas_pc': 'Parque Furgonetas por Cápita',
-                'motocicletas_pc': 'Parque Motocicletas por Cápita',
-                'total_pc': 'Parque Total por Cápita',
-                'turismos_pc': 'Parque Turismos por Cápita',
-                'censo_pc': 'Censo de Vehículos por Cápita'
-            };
-            return nombres[submapa] || submapa;
+        function resetearBotonesNivel() {
+            document.querySelectorAll('#nivelesContainer button').forEach(button => button.classList.remove('selected'));
         }
 
-        // Función para actualizar el mapa según las selecciones
+        function resetearBotonesSubmapa() {
+            document.querySelectorAll('#submapaContainer button').forEach(button => button.classList.remove('selected'));
+        }
+
         function actualizarMapa() {
             const url = obtenerUrlMapa(tipoMapa, nivelAdministrativo, submapaSeleccionado);
             document.getElementById("mapaFrame").src = url;
         }
 
-        // Función para obtener la URL del mapa basado en las selecciones
         function obtenerUrlMapa(mapa, nivel, submapa) {
             const baseUrl = "https://bc3lc.github.io/mapsTE/mapas_dinamicos/";
 
@@ -209,12 +188,10 @@
                 }
             }
 
-            // El resto de los mapas sigue igual, según el submapa y nivel seleccionado.
-
+            // Otros mapas...
             return ''; // Si no hay mapa válido
         }
 
-        // Función para expandir el mapa
         function expandirMapa() {
             let iframe = document.getElementById("mapaFrame");
             const url = iframe.src;
