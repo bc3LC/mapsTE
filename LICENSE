@@ -2,6 +2,15 @@ BSD 2-Clause License
 
 Copyright (c) 2025, BC3 Low Carbon department
 
+Citation Requirement
+While the use and redistribution of this material are permitted under the BSD 2-Clause License, any reproduction or redistribution of the content must cite the authors as specified in the CITATION.cff file included in the repository. 
+
+The authors to be cited are:
+- Mercè Amich (ORCID: https://orcid.org/0009-0009-5059-2247)
+- Eva Alonso-Epelde (ORCID: https://orcid.org/0000-0002-4052-1703)
+
+For more information, please refer to the [CITATION.cff](https://github.com/bc3LC/mapsTE/blob/main/README.md).
+
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
