@@ -240,28 +240,28 @@
             }
 
             if (tipoMapa === 'vehiculos') {
-                if (submapaSeleccionado === 'vehiculos_sin_itv') {
+                if (submapaSeleccionado === 'Total (sin ITV)') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_vehiculos_sin_ITV.html`;
                 }
-                if (submapaSeleccionado === 'itv_turismos') {
+                if (submapaSeleccionado === 'Turismos (sin ITV)') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_ITV_turismos.html`;
                 }
-                if (submapaSeleccionado === 'itv_motocicletas') {
+                if (submapaSeleccionado === 'Moto. (sin ITV)') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_ITV_motocicletas.html`;
                 }
-                if (submapaSeleccionado === 'turismos_25') {
+                if (submapaSeleccionado === 'Turismos (>25a)') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_turismos_15_mas.html`;
                 }
-                if (submapaSeleccionado === 'furgonetas_25') {
+                if (submapaSeleccionado === 'Furgo. (>25a)') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_furgonetas_15_mas.html`;
                 }
-                if (submapaSeleccionado === 'camiones_25') {
+                if (submapaSeleccionado === 'Camiones (>25a)') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_camiones_15_mas.html`;
                 }
             }
 
             if (tipoMapa === 'distintivos') {
-                if (submapaSeleccionado === 'eco_0') {
+                if (submapaSeleccionado === 'ECO+0') {
                     return `${baseUrl}map_${nivelAdministrativo}_distintivo_ECO_0.html`;
                 }
                 if (submapaSeleccionado === 'eco') {
@@ -316,10 +316,10 @@
                 submapas = ['ciclomotores', 'motocicletas', 'turismos', 'furgonetas', 'camiones'];
             }
             else if (tipoMapa === 'vehiculos') {
-                submapas = ['vehiculos_sin_itv', 'itv_turismos', 'itv_motocicletas', 'turismos_25', 'furgonetas_25', 'camiones_25'];
+                submapas = ['Total (sin ITV)', 'Turismos (sin ITV)', 'Moto. (sin ITV)', 'Turismos (>25a)', 'Furgo. (>25a)', 'Camiones (>25a)'];
             }
             else if (tipoMapa === 'distintivos') {
-                submapas = ['eco_0', 'eco', '0', 'b', 'c', 'sin'];
+                submapas = ['ECO+0', 'eco', '0', 'b', 'c', 'sin'];
             }
 
             // Crear los botones de submapas
