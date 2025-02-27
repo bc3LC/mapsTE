@@ -9,6 +9,8 @@
 # Author 2         : Mercè Amich Vidal (merce.amich[at]ehu.eus)
 # Institution      : Basque Centre for Climate Change (BC3)
 
+# Last run time    : 14.40474 min
+
 ###############################################################################
 
 # ************************************************************
@@ -17,6 +19,9 @@
 
 # Clean environment
 rm(list = ls(all = TRUE))    
+
+# Define start time
+start_time <- Sys.time()
 
 # Define language
 Sys.setenv(LANG = "en")     
@@ -601,9 +606,9 @@ titulos <- c(
   "pct_vehiculos_sin_ITV"        = "Porcentaje de vehículos (<25 años) sin ITV",
   "pct_ITV_turismos"             = "Porcentaje de turismos sin ITV (<25 años)",
   "pct_ITV_motocicletas"         = "Porcentaje de motocicletas sin ITV (<25 años)",
-  "pct_turismos_15_mas"          = "Porcentaje de turismos con antigüedad ≥ 15 años",
-  "pct_furgonetas_15_mas"        = "Porcentaje de furgonetas con antigüedad ≥ 15 años",
-  "pct_camiones_15_mas"          = "Porcentaje de camiones con antigüedad ≥ 15 años",
+  "pct_turismos_15_mas"          = "Porcentaje de turismos con antigüedad (entre 15 y 25 años)",
+  "pct_furgonetas_15_mas"        = "Porcentaje de furgonetas con antigüedad (entre 15 y 25 años)",
+  "pct_camiones_15_mas"          = "Porcentaje de camiones con antigüedad (entre 15 y 25 años)",
   "distintivo_ECO_0"             = "Prevalencia de vehículos con Distintivo ECO o 0"
 )
 
@@ -957,3 +962,12 @@ for (var in metricas) {
   }
 }
 
+
+
+
+
+
+#### End time
+end_time       <- Sys.time()
+execution_time <- end_time - start_time
+cat("Tiempo de ejecución:", execution_time, "\n")
