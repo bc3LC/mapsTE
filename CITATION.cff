@@ -4,9 +4,11 @@ authors:
   - family-names: Amich
     given-names: Mercè
     orcid: "https://orcid.org/0009-0009-5059-2247"
+    affiliation: "Basque Center for Climate Change (BC3)"
   - family-names: Alonso-Epelde
     given-names: Eva
     orcid: "https://orcid.org/0000-0002-4052-1703"
+    affiliation: "Basque Center for Climate Change (BC3)"
 title: "Explotación gráfica de la base de datos de la DGT 'Información sobre la composición del parque de vehículos y su antigüedad, y del censo de conductores. Datos consolidados (2023)'"
 version: "1.0"
 doi: "Pending"
