@@ -16,6 +16,8 @@ Para obtener información sobre cómo citar este proyecto, por favor consulta el
 
 *Amich, M., & Alonso-Epelde, E. (2025). Explotación gráfica de la base de datos de la DGT 'Información sobre la composición del parque de vehículos y su antigüedad, y del censo de conductores. Datos consolidados (2023). Basque Center for Climate Change (BC3). https://bc3lc.github.io/mapsTE/*
 
+![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15008132.svg)
+
 
 
 ---
