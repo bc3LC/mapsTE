@@ -1244,7 +1244,7 @@ for (familia in names(familia_mapas)) {
         # Anotación
         addControl(html = "<div style='font-size: 12px; color: #555; background-color: white; padding: 5px; 
                        border-radius: 5px; margin-top: 5px;'>  
-           <em>Nota: Tramos de la leyenda calculados como quintiles de la distribución de la variable</em>
+           <em>Nota: Los intervalos de la leyenda se calcularon agrupando valores similares dentro de cada categoría de análisis</em>
            </div>", 
                    position = "bottomright") %>%
         
