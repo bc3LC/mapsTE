@@ -1287,7 +1287,7 @@ for (familia in names(familia_mapas)) {
         # Anotación
         addControl(html = "<div style='font-size: 12px; color: #555; background-color: white; padding: 5px; 
                        border-radius: 5px; margin-top: 5px;'>  
-           <em>Nota: Los intervalos de la leyenda se calcularon agrupando valores similares dentro de cada categoría de análisis</em>
+           <em>Nota: Los intervalos de la leyenda están fijados para poder comparar mapas de una misma categoría de análisis</em>
            </div>", 
                    position = "bottomright") %>%
         
