@@ -574,8 +574,8 @@ familia_mapas <- list(
                         "distintivo_ECO_0")
 )
 
-# Crear subdirectorios por familias de mapas y calcular breaks por familia
-breaks_familias <- list()
+# Crear subdirectorios por familias de mapas y calcular breaks por familia y nivel
+breaks_familias_muni <- list()
 
 for (familia in names(familia_mapas)) {
   
@@ -587,7 +587,37 @@ for (familia in names(familia_mapas)) {
   all_values <- all_values[!is.na(all_values)]  
   
   # Calcular los breaks para esta familia de variables
-  breaks_familias[[familia]] <- get_breaks(all_values, n_bins = 6)
+  breaks_familias_muni[[familia]] <- get_breaks(all_values, n_bins = 6)
+}
+
+breaks_familias_prov <- list()
+
+for (familia in names(familia_mapas)) {
+  
+  # Obtener las variables de la familia
+  variables <- familia_mapas[[familia]]
+  
+  # Extraer valores de todas las variables de la familia en un solo vector
+  all_values <- unlist(provincias_data[variables], use.names = FALSE)
+  all_values <- all_values[!is.na(all_values)]  
+  
+  # Calcular los breaks para esta familia de variables
+  breaks_familias_prov[[familia]] <- get_breaks(all_values, n_bins = 6)
+}
+
+breaks_familias_ccaa <- list()
+
+for (familia in names(familia_mapas)) {
+  
+  # Obtener las variables de la familia
+  variables <- familia_mapas[[familia]]
+  
+  # Extraer valores de todas las variables de la familia en un solo vector
+  all_values <- unlist(ccaa_data[variables], use.names = FALSE)
+  all_values <- all_values[!is.na(all_values)]  
+  
+  # Calcular los breaks para esta familia de variables
+  breaks_familias_ccaa[[familia]] <- get_breaks(all_values, n_bins = 6)
 }
 
 # Función para determinar la unidad y títulos basados en el tipo de variable
@@ -687,7 +717,7 @@ for (familia in names(familia_mapas)) {
     titulo <- metrica_info$title
     
     # Obtener los breaks y las etiquetas para esta familia de variables
-    breaks_info <- breaks_familias[[familia]]
+    breaks_info <- breaks_familias_muni[[familia]]
     breaks <- breaks_info$breaks
     labels <- breaks_info$labels
     
@@ -797,7 +827,7 @@ for (familia in names(familia_mapas)) {
     titulo <- metrica_info$title
     
     # Obtener los breaks y las etiquetas para esta familia de variables
-    breaks_info <- breaks_familias[[familia]]
+    breaks_info <- breaks_familias_muni[[familia]]
     
     # Asignar los breaks y las etiquetas a sus respectivas variables
     breaks <- breaks_info$breaks
@@ -901,7 +931,7 @@ create_subdir <- function(familia) {
       titulo <- metrica_info$title
       
       # Obtener los breaks y las etiquetas con la nueva función
-      breaks_info <- breaks_familias[[familia]]
+      breaks_info <- breaks_familias_prov[[familia]]
       
       # Asignar los breaks y las etiquetas a sus respectivas variables
       breaks <- breaks_info$breaks
@@ -1005,7 +1035,7 @@ for (familia in names(familia_mapas)) {
     titulo <- metrica_info$title
     
     # Obtener los breaks y las etiquetas con la nueva función
-    breaks_info <- breaks_familias[[familia]]
+    breaks_info <- breaks_familias_ccaa[[familia]]
     
     # Asignar los breaks y las etiquetas a sus respectivas variables
     breaks <- breaks_info$breaks
@@ -1126,11 +1156,24 @@ for (familia in names(familia_mapas)) {
           left_join(municipios_data, by = c("name" = "Municipio"))
       }
       
-      # Obtener los breaks y las etiquetas según la familia
-      breaks_info <- breaks_familias[[familia]]  
+      # Obtener los breaks y las etiquetas según la familia y el nivel
+      
+      # Procesar datos para el nivel administrativo
+      if (nivel == "ccaa") {
+      breaks_info  <- breaks_familias_ccaa[[familia]]  
       breaks_nivel <- breaks_info$breaks
       labels       <- breaks_info$labels
       
+      } else if (nivel == "prov") {
+      breaks_info  <- breaks_familias_prov[[familia]]  
+      breaks_nivel <- breaks_info$breaks
+      labels       <- breaks_info$labels
+      
+      } else {
+      breaks_info  <- breaks_familias_muni[[familia]]  
+      breaks_nivel <- breaks_info$breaks
+      labels       <- breaks_info$labels
+      }
       # Generar etiquetas dinámicamente con la unidad
       labels <- paste0(labels, unidad)
       
@@ -1274,7 +1317,8 @@ for (familia in names(familia_mapas)) {
 }
 
 
-#### End time
+
+ #### End time
 end_time       <- Sys.time()
 execution_time <- end_time - start_time
 cat("Tiempo de ejecución:", execution_time, "\n")
