@@ -462,22 +462,25 @@ create_subdir <- function(subfolder) {
   setwd(sub_path)
 }
 
-# Función para crear los breaks de los plots
-get_breaks <- function(data, n_bins = 6) {
+get_breaks <- function(data, n_bins = 6, antiguedad = FALSE) {
   
-  # Calcular los percentiles
-  breaks <- quantile(data, probs = seq(0, 1, length.out = n_bins + 1), na.rm = TRUE)
-  
-  # Si los breaks no son únicos, forzar exactamente 6 intervalos con 'pretty'
-  if (length(unique(breaks)) != length(breaks)) {
-    breaks <- pretty(data, n_bins)
+  # Si la familia es antigüedad, usar los breaks y labels predefinidos
+  if (antiguedad) {
+    breaks <- c(0.00000, 12.00000, 13.00000, 14.00000, 16.00000, 19.00000, Inf) 
+    labels <- c("0-12", "12-13", "13-14", "14-16", "16-19", "19 y más") 
+  } else {
+    # Calcular los percentiles para otras familias
+    breaks <- quantile(data, probs = seq(0, 1, length.out = n_bins + 1), na.rm = TRUE)
+    
+    # Si los breaks no son únicos, forzar exactamente 6 intervalos con 'pretty'
+    if (length(unique(breaks)) != length(breaks)) {
+      breaks <- pretty(data, n_bins)
+    }
+    
+    # Redondear solo las etiquetas de la leyenda
+    labels <- paste0(round(head(breaks, -1), 2), "-", round(tail(breaks, -1), 2))
+    labels[length(labels)] <- paste0(round(breaks[length(breaks) - 1], 2), " y más")
   }
-  
-  # Redondear solo las etiquetas de la leyenda, no los breaks
-  labels <- paste0("[", round(head(breaks, -1), 2), "-", round(tail(breaks, -1), 2), "]")
-  
-  # Modificar el último tramo para que sea "y más"
-  labels[length(labels)] <- paste0(round(breaks[length(breaks) - 1], 2), " y más")
   
   # Devolver los breaks y las etiquetas
   return(list(breaks = breaks, labels = labels))
@@ -586,8 +589,14 @@ for (familia in names(familia_mapas)) {
   all_values <- unlist(municipios_data[variables], use.names = FALSE)
   all_values <- all_values[!is.na(all_values)]  
   
-  # Calcular los breaks para esta familia de variables
-  breaks_familias_muni[[familia]] <- get_breaks(all_values, n_bins = 6)
+  # Determinar si la familia es "antigüedad" para ajustar los breaks
+  if (familia == "mapas_antiguedad") {
+    # Calcular los breaks con el ajuste para antigüedad
+    breaks_familias_muni[[familia]] <- get_breaks(all_values, n_bins = 6, antiguedad = TRUE)
+  } else {
+    # Calcular los breaks para otras familias
+    breaks_familias_muni[[familia]] <- get_breaks(all_values, n_bins = 6)
+  }
 }
 
 breaks_familias_prov <- list()
