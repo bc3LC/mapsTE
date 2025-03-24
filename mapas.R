@@ -310,8 +310,6 @@ diff1 # Elements in data$ not present in $municipios (12 diferencias)
 diff2 # Elements in municipios$ not present in data$ (11 diferencias)
 
 # Fusionamos datos de Cerdedo y Cotobade:
-library(dplyr)
-
 data_fusionada <- data %>%
   filter(`Código.INE` %in% c(36012, 36902)) %>%
   summarise(
@@ -610,8 +608,16 @@ for (familia in names(familia_mapas)) {
   all_values <- unlist(provincias_data[variables], use.names = FALSE)
   all_values <- all_values[!is.na(all_values)]  
   
-  # Calcular los breaks para esta familia de variables
-  breaks_familias_prov[[familia]] <- get_breaks(all_values, n_bins = 6)
+  # Determinar si la familia es "antigüedad" para ajustar los breaks
+  if (familia == "mapas_antiguedad") {
+    
+    # Calcular los breaks con el ajuste para antigüedad
+    breaks_familias_prov[[familia]] <- get_breaks(all_values, n_bins = 6, antiguedad = TRUE)
+    
+  } else {
+    # Calcular los breaks para otras familias
+    breaks_familias_prov[[familia]] <- get_breaks(all_values, n_bins = 6)
+  }
 }
 
 breaks_familias_ccaa <- list()
@@ -625,9 +631,18 @@ for (familia in names(familia_mapas)) {
   all_values <- unlist(ccaa_data[variables], use.names = FALSE)
   all_values <- all_values[!is.na(all_values)]  
   
-  # Calcular los breaks para esta familia de variables
-  breaks_familias_ccaa[[familia]] <- get_breaks(all_values, n_bins = 6)
+  # Determinar si la familia es "antigüedad" para ajustar los breaks
+  if (familia == "mapas_antiguedad") {
+    
+    # Calcular los breaks con el ajuste para antigüedad
+    breaks_familias_ccaa[[familia]] <- get_breaks(all_values, n_bins = 6, antiguedad = TRUE)
+    
+  } else {
+    # Calcular los breaks para otras familias
+    breaks_familias_ccaa[[familia]] <- get_breaks(all_values, n_bins = 6)
+  }
 }
+
 
 # Función para determinar la unidad y títulos basados en el tipo de variable
 get_unit_and_title <- function(var) {
@@ -1112,6 +1127,78 @@ for (familia in names(familia_mapas)) {
 # ************************************************************
 # 8. Crear mapas dinámicos para todos los niveles y métricas ----
 # ************************************************************
+
+# Crear subdirectorios por familias de mapas y calcular breaks por familia y nivel
+
+breaks_familias_muni <- list()
+
+for (familia in names(familia_mapas)) {
+  
+  # Obtener las variables de la familia
+  variables <- familia_mapas[[familia]]
+  
+  # Extraer valores de todas las variables de la familia en un solo vector
+  all_values <- unlist(municipios_data[variables], use.names = FALSE)
+  all_values <- all_values[!is.na(all_values)]  
+  
+  # Determinar si la familia es "antigüedad" para ajustar los breaks
+  if (familia == "mapas_antiguedad") {
+    
+    # Calcular los breaks con el ajuste para antigüedad
+    breaks_familias_muni[[familia]] <- get_breaks(all_values, n_bins = 6, antiguedad = TRUE)
+    
+  } else {
+    # Calcular los breaks para otras familias
+    breaks_familias_muni[[familia]] <- get_breaks(all_values, n_bins = 6)
+  }
+}
+
+breaks_familias_prov <- list()
+
+for (familia in names(familia_mapas)) {
+  
+  # Obtener las variables de la familia
+  variables <- familia_mapas[[familia]]
+  
+  # Extraer valores de todas las variables de la familia en un solo vector
+  all_values <- unlist(provincias_data[variables], use.names = FALSE)
+  all_values <- all_values[!is.na(all_values)]  
+  
+  # Determinar si la familia es "antigüedad" para ajustar los breaks
+  if (familia == "mapas_antiguedad") {
+    
+    # Calcular los breaks con el ajuste para antigüedad
+    breaks_familias_prov[[familia]] <- get_breaks(all_values, n_bins = 6, antiguedad = TRUE)
+    
+  } else {
+    # Calcular los breaks para otras familias
+    breaks_familias_prov[[familia]] <- get_breaks(all_values, n_bins = 6)
+  }
+}
+
+
+breaks_familias_ccaa <- list()
+
+for (familia in names(familia_mapas)) {
+  
+  # Obtener las variables de la familia
+  variables <- familia_mapas[[familia]]
+  
+  # Extraer valores de todas las variables de la familia en un solo vector
+  all_values <- unlist(ccaa_data[variables], use.names = FALSE)
+  all_values <- all_values[!is.na(all_values)]  
+  
+  # Determinar si la familia es "antigüedad" para ajustar los breaks
+  if (familia == "mapas_antiguedad") {
+    
+    # Calcular los breaks con el ajuste para antigüedad
+    breaks_familias_ccaa[[familia]] <- get_breaks(all_values, n_bins = 6, antiguedad = TRUE)
+    
+  } else {
+    # Calcular los breaks para otras familias
+    breaks_familias_ccaa[[familia]] <- get_breaks(all_values, n_bins = 6)
+  }
+}
 
 # Set working domain al principio de nuevo 
 setwd(path)
