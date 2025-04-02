@@ -8,114 +8,181 @@
     <!-- Fuente Outfit -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
 
-<style>
-    /* Estilos generales de la página */
-    body {
-        font-family: 'Outfit', sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        margin: 0;
-        background-color: #f4f4f4;
-    }
+    <style>
+        /* Estilos generales de la página */
+        body {
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
 
-    /* Primera barra superior con el título y la descripción */
-    .header {
-        width: 100%;
-        background: #11302D;
-        color: white;
-        height: 100px;
-        padding: 2px;
-        text-align: center;
-    }
-    
-    /* Segunda barra donde están los botones de selección */
-    .menu {
-        width: 100%;
-        background: #4EBF7B;
-        height: 100px;
-        padding: 2px;
-        color: white;
-        display: flex;
-        justify-content: center;
-        gap: 30px;
-        flex-wrap: wrap;
-    }
+        /* Primera barra superior con el título y la descripción */
+        .header {
+            width: 100%;
+            background: #11302D;
+            color: white;
+            height: 100px;
+            padding: 20px 10px;
+            text-align: center;
+            box-sizing: border-box;
+        }
 
-    /* Estilos de los botones de la barra de selección */
-    .menu button {
-        font-family: 'Outfit', sans-serif;
-        background: #11302D;
-        color: white;
-        border: none;
-        padding: 8px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
+        /* Segunda barra donde están los botones de selección */
+        .menu {
+            width: 100%;
+            background: #4EBF7B;
+            height: auto;
+            padding: 20px 10px;
+            color: white;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
 
-    /* Botón seleccionado */
-    .menu button.selected {
-        background: white;
-        color: #11302D;
-    }
+        /* Estilos de los botones de la barra de selección */
+        .menu button {
+            font-family: 'Outfit', sans-serif;
+            background: #11302D;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 5px;
+        }
 
-    /* Efecto hover en los botones */
-    .menu button:hover {
-        background: #666;
-    }
+        /* Botón seleccionado */
+        .menu button.selected {
+            background: white;
+            color: #11302D;
+        }
 
-    /* Contenedor principal del mapa */
-    .container {
-        width: 90%;
-        max-width: 1200px;
-        margin-top: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+        /* Efecto hover en los botones */
+        .menu button:hover {
+            background: #666;
+        }
 
-    /* Estilos para el iframe del mapa */
-    iframe {
-        width: 100%;
-        height: 480px;
-        border: none;
-    }
+        /* Contenedor principal del mapa */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    /* Contenedor del botón de expandir y el texto de copyright */
-    .expand-container {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        width: 100%;
-        margin-top: 30px;
-        gap: 10px;
-    }
-    
-    /* Botón para expandir el mapa */
-    .expand {
-        font-family: 'Outfit', sans-serif;
-        padding: 8px 15px;
-        background: #4EBF7B;
-        color: white;
-        border: none;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    
-    /* Hover del botón */
-    .expand:hover {
-        background: #3f9e67;
-    }
-    
-    /* Texto de copyright */
-    .footer-text {
-        font-size: 12px;
-        color: #333;
-    }
+        /* Estilos para el iframe del mapa */
+        iframe {
+            width: 100%;
+            height: 480px;
+            border: none;
+        }
 
-</style>
+        /* Contenedor del botón de expandir y el texto de copyright */
+        .expand-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            margin-top: 30px;
+            gap: 10px;
+        }
 
+        /* Botón para expandir el mapa */
+        .expand {
+            font-family: 'Outfit', sans-serif;
+            padding: 8px 15px;
+            background: #4EBF7B;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* Hover del botón */
+        .expand:hover {
+            background: #3f9e67;
+        }
+
+        /* Texto de copyright */
+        .footer-text {
+            font-size: 12px;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        /* Media query para pantallas más pequeñas */
+        @media (max-width: 768px) {
+            .header h2 {
+                font-size: 20px;
+            }
+
+            .header p {
+                font-size: 14px;
+                margin-top: 10px;
+            }
+
+            .menu {
+                flex-direction: column;
+                padding: 15px 10px;
+            }
+
+            .menu button {
+                padding: 10px;
+                font-size: 14px;
+                width: 100%;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+            }
+
+            .container {
+                margin-top: 10px;
+                padding: 10px;
+            }
+
+            iframe {
+                height: 400px;
+            }
+
+            .expand-container {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .footer-text {
+                font-size: 10px;
+                text-align: center;
+                margin-top: 15px;
+            }
+        }
+
+        /* Media query para pantallas más grandes */
+        @media (max-width: 480px) {
+            .menu {
+                padding: 10px;
+            }
+
+            .menu button {
+                padding: 8px;
+                font-size: 12px;
+                margin: 5px;
+            }
+
+            iframe {
+                height: 300px;
+            }
+
+            .footer-text {
+                font-size: 9px;
+            }
+        }
+
+    </style>
 </head>
 <body>
 
@@ -126,7 +193,7 @@
     </div>
 
     <!-- Menú con los botones para seleccionar el mapa, nivel y submapa -->
-<div class="menu">
+    <div class="menu">
         <!-- Botones para seleccionar el mapa -->
         <div>
             <h3>Seleccionar Mapa</h3>
@@ -156,7 +223,7 @@
         <iframe id="mapaFrame" src=""></iframe>
         <button class="expand" onclick="expandirMapa()">🔍 Expandir</button>
         <div class="footer-text">
-          © BC3 Low Carbon department (2025). Reproduction requires citation as specified <a href="https://github.com/bc3LC/mapsTE/blob/main/README.md" target="_blank">here</a>.
+            © BC3 Low Carbon department (2025). Reproduction requires citation as specified <a href="https://github.com/bc3LC/mapsTE/blob/main/README.md" target="_blank">here</a>.
         </div>
     </div>
 
@@ -177,11 +244,10 @@
             const baseUrl = "https://bc3lc.github.io/mapsTE/mapas_dinamicos/";
 
             if (tipoMapa === 'motorizacion') {
-                
                 if (submapaSeleccionado === 'turismos') {
-                    return `${baseUrl}map_${nivelAdministrativo}_parque_turismos_pc.html`;              
+                    return `${baseUrl}map_${nivelAdministrativo}_parque_turismos_pc.html`;
                 }
-                 if (submapaSeleccionado === 'furgonetas') {
+                if (submapaSeleccionado === 'furgonetas') {
                     return `${baseUrl}map_${nivelAdministrativo}_parque_furgonetas_pc.html`;
                 }
                 if (submapaSeleccionado === 'ciclomotores') {
@@ -205,7 +271,7 @@
                 if (submapaSeleccionado === 'turismos') {
                     return `${baseUrl}map_${nivelAdministrativo}_antiguedad_turismos.html`;
                 }
-                 if (submapaSeleccionado === 'furgonetas') {
+                if (submapaSeleccionado === 'furgonetas') {
                     return `${baseUrl}map_${nivelAdministrativo}_antiguedad_furgonetas.html`;
                 }
                 if (submapaSeleccionado === 'ciclomotores') {
@@ -223,7 +289,6 @@
             }
 
             if (tipoMapa === 'composicion') {
-                 
                 if (submapaSeleccionado === 'turismos') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_turismos.html`;
                 }
@@ -365,7 +430,6 @@
             actualizarSubmapa(); // Cargar submapas según el mapa predeterminado
             cargarMapa(); // Cargar el mapa inicial
         };
-
     </script>
 
 </body>
