@@ -25,10 +25,20 @@
             width: 100%;
             background: #11302D;
             color: white;
-            height: 100px;
-            padding: 20px 10px;
+            padding: 15px 10px;
             text-align: center;
             box-sizing: border-box;
+        }
+
+        /* Título y subtítulo en la barra superior */
+        .header h2 {
+            font-size: 22px;
+            margin: 0;
+        }
+
+        .header p {
+            font-size: 14px;
+            margin-top: 5px;
         }
 
         /* Segunda barra donde están los botones de selección */
@@ -53,6 +63,7 @@
             cursor: pointer;
             transition: 0.3s;
             margin: 5px;
+            white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
         }
 
         /* Botón seleccionado */
@@ -358,78 +369,51 @@
             cargarMapa(); // Recargar el mapa
         }
 
-        // Función para manejar la selección de un nivel administrativo
-        function actualizarNivel(nivel) {
-            nivelAdministrativo = nivel; // Actualizamos el nivel administrativo
-            actualizarSubmapa(); // Actualizar submapas según el tipo de mapa y nivel
-            cargarMapa(); // Recargar el mapa
-        }
-
-        // Actualizar los submapas disponibles según el tipo de mapa seleccionado
+        // Función para actualizar la visualización de los submapas según el tipo de mapa
         function actualizarSubmapa() {
-            const submapaContainer = document.getElementById("submapaContainer");
-            submapaContainer.innerHTML = '<h3>Seleccionar Submapa</h3>'; // Reiniciar contenido de submapa
+            const container = document.getElementById("submapaContainer");
+            container.innerHTML = ''; // Limpiar submapas actuales
 
+            // Lógica para mostrar submapas dependiendo del tipo de mapa
             let submapas = [];
-            
-            // Definir los submapas según el tipo de mapa
             if (tipoMapa === 'motorizacion') {
                 submapas = ['turismos', 'furgonetas', 'ciclomotores', 'motocicletas', 'camiones', 'total', 'conductores'];
-            }
-            else if (tipoMapa === 'antiguedad') {
+            } else if (tipoMapa === 'antiguedad') {
                 submapas = ['turismos', 'furgonetas', 'ciclomotores', 'motocicletas', 'camiones', 'total'];
-            }
-            else if (tipoMapa === 'composicion') {
+            } else if (tipoMapa === 'composicion') {
                 submapas = ['turismos', 'furgonetas', 'ciclomotores', 'motocicletas', 'camiones'];
-            }
-            else if (tipoMapa === 'vehiculos') {
+            } else if (tipoMapa === 'vehiculos') {
                 submapas = ['Total (sin ITV)', 'Turismos (sin ITV)', 'Moto. (sin ITV)', 'Turismos (15-25a)', 'Furgo. (15-25a)', 'Camiones (15-25a)'];
-            }
-            else if (tipoMapa === 'distintivos') {
+            } else if (tipoMapa === 'distintivos') {
                 submapas = ['ECO+0', 'eco', '0', 'b', 'c', 'sin'];
             }
 
-            // Crear los botones de submapas
+            // Crear los botones dinámicamente
             submapas.forEach(submapa => {
-                const btn = document.createElement("button");
-                btn.innerText = `${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`;
-                btn.id = `submapa-${submapa}`;
-                btn.onclick = () => actualizarSubmapaSeleccionado(submapa); // Cada submapa también carga el mapa
-                submapaContainer.appendChild(btn);
+                const button = document.createElement('button');
+                button.innerText = submapa;
+                button.onclick = function() {
+                    submapaSeleccionado = submapa;
+                    cargarMapa(); // Cargar el mapa cuando se selecciona un submapa
+                };
+                container.appendChild(button);
             });
         }
 
-        // Actualizar el submapa seleccionado
-        function actualizarSubmapaSeleccionado(submapa) {
-            submapaSeleccionado = submapa;
-            cargarMapa(); // Recargar el mapa
+        // Función para cambiar el nivel administrativo
+        function actualizarNivel(nivel) {
+            nivelAdministrativo = nivel;
+            cargarMapa(); // Recargar el mapa con el nuevo nivel
         }
 
-        // Función para expandir el mapa en una nueva pestaña
+        // Función para expandir el mapa
         function expandirMapa() {
-            let iframe = document.getElementById("mapaFrame");
-            const url = iframe.src;
-            window.open(url, "_blank");
+            const iframe = document.getElementById("mapaFrame");
+            iframe.style.height = "800px"; // Aumentar la altura al expandir
         }
 
-        // Función para actualizar el estilo de los botones seleccionados
-        function actualizarBotones() {
-            // Restablecer todos los botones
-            document.querySelectorAll('.menu button').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-
-            // Resaltar los botones activos
-            document.getElementById(`mapa-${tipoMapa}`).classList.add('selected');
-            document.getElementById(`nivel-${nivelAdministrativo}`).classList.add('selected');
-            document.getElementById(`submapa-${submapaSeleccionado}`).classList.add('selected');
-        }
-
-        // Cargar mapa inicial al cargar la página
-        window.onload = () => {
-            actualizarSubmapa(); // Cargar submapas según el mapa predeterminado
-            cargarMapa(); // Cargar el mapa inicial
-        };
+        // Cargar el mapa inicial
+        cargarMapa();
     </script>
 
 </body>
