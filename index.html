@@ -8,192 +8,114 @@
     <!-- Fuente Outfit -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
 
-    <style>
-        /* Estilos generales de la página */
-        body {
-            font-family: 'Outfit', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
+<style>
+    /* Estilos generales de la página */
+    body {
+        font-family: 'Outfit', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin: 0;
+        background-color: #f4f4f4;
+    }
 
-        /* Primera barra superior con el título y la descripción */
-        .header {
-            width: 100%;
-            background: #11302D;
-            color: white;
-            padding: 15px 10px;
-            text-align: center;
-            box-sizing: border-box;
-        }
+    /* Primera barra superior con el título y la descripción */
+    .header {
+        width: 100%;
+        background: #11302D;
+        color: white;
+        height: 100px;
+        padding: 2px;
+        text-align: center;
+    }
+    
+    /* Segunda barra donde están los botones de selección */
+    .menu {
+        width: 100%;
+        background: #4EBF7B;
+        height: 100px;
+        padding: 2px;
+        color: white;
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
 
-        /* Título y subtítulo en la barra superior */
-        .header h2 {
-            font-size: 22px;
-            margin: 0;
-        }
+    /* Estilos de los botones de la barra de selección */
+    .menu button {
+        font-family: 'Outfit', sans-serif;
+        background: #11302D;
+        color: white;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
 
-        .header p {
-            font-size: 14px;
-            margin-top: 5px;
-        }
+    /* Botón seleccionado */
+    .menu button.selected {
+        background: white;
+        color: #11302D;
+    }
 
-        /* Segunda barra donde están los botones de selección */
-        .menu {
-            width: 100%;
-            background: #4EBF7B;
-            height: auto;
-            padding: 20px 10px;
-            color: white;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
+    /* Efecto hover en los botones */
+    .menu button:hover {
+        background: #666;
+    }
 
-        /* Estilos de los botones de la barra de selección */
-        .menu button {
-            font-family: 'Outfit', sans-serif;
-            background: #11302D;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin: 5px;
-            white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
-        }
+    /* Contenedor principal del mapa */
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-        /* Botón seleccionado */
-        .menu button.selected {
-            background: white;
-            color: #11302D;
-        }
+    /* Estilos para el iframe del mapa */
+    iframe {
+        width: 100%;
+        height: 480px;
+        border: none;
+    }
 
-        /* Efecto hover en los botones */
-        .menu button:hover {
-            background: #666;
-        }
+    /* Contenedor del botón de expandir y el texto de copyright */
+    .expand-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        margin-top: 30px;
+        gap: 10px;
+    }
+    
+    /* Botón para expandir el mapa */
+    .expand {
+        font-family: 'Outfit', sans-serif;
+        padding: 8px 15px;
+        background: #4EBF7B;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    
+    /* Hover del botón */
+    .expand:hover {
+        background: #3f9e67;
+    }
+    
+    /* Texto de copyright */
+    .footer-text {
+        font-size: 12px;
+        color: #333;
+    }
 
-        /* Contenedor principal del mapa */
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+</style>
 
-        /* Estilos para el iframe del mapa */
-        iframe {
-            width: 100%;
-            height: 480px;
-            border: none;
-        }
-
-        /* Contenedor del botón de expandir y el texto de copyright */
-        .expand-container {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            width: 100%;
-            margin-top: 30px;
-            gap: 10px;
-        }
-
-        /* Botón para expandir el mapa */
-        .expand {
-            font-family: 'Outfit', sans-serif;
-            padding: 8px 15px;
-            background: #4EBF7B;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        /* Hover del botón */
-        .expand:hover {
-            background: #3f9e67;
-        }
-
-        /* Texto de copyright */
-        .footer-text {
-            font-size: 12px;
-            color: #333;
-            margin-top: 20px;
-        }
-
-        /* Media query para pantallas más pequeñas */
-        @media (max-width: 768px) {
-            .header h2 {
-                font-size: 20px;
-            }
-
-            .header p {
-                font-size: 14px;
-                margin-top: 10px;
-            }
-
-            .menu {
-                flex-direction: column;
-                padding: 15px 10px;
-            }
-
-            .menu button {
-                padding: 10px;
-                font-size: 14px;
-                width: 100%;
-                box-sizing: border-box;
-                margin-bottom: 10px;
-            }
-
-            .container {
-                margin-top: 10px;
-                padding: 10px;
-            }
-
-            iframe {
-                height: 400px;
-            }
-
-            .expand-container {
-                justify-content: center;
-                width: 100%;
-            }
-
-            .footer-text {
-                font-size: 10px;
-                text-align: center;
-                margin-top: 15px;
-            }
-        }
-
-        /* Media query para pantallas más grandes */
-        @media (max-width: 480px) {
-            .menu {
-                padding: 10px;
-            }
-
-            .menu button {
-                padding: 8px;
-                font-size: 12px;
-                margin: 5px;
-            }
-
-            iframe {
-                height: 300px;
-            }
-
-            .footer-text {
-                font-size: 9px;
-            }
-        }
-
-    </style>
 </head>
 <body>
 
@@ -204,7 +126,7 @@
     </div>
 
     <!-- Menú con los botones para seleccionar el mapa, nivel y submapa -->
-    <div class="menu">
+<div class="menu">
         <!-- Botones para seleccionar el mapa -->
         <div>
             <h3>Seleccionar Mapa</h3>
@@ -234,7 +156,7 @@
         <iframe id="mapaFrame" src=""></iframe>
         <button class="expand" onclick="expandirMapa()">🔍 Expandir</button>
         <div class="footer-text">
-            © BC3 Low Carbon department (2025). Reproduction requires citation as specified <a href="https://github.com/bc3LC/mapsTE/blob/main/README.md" target="_blank">here</a>.
+          © BC3 Low Carbon department (2025). Reproduction requires citation as specified <a href="https://github.com/bc3LC/mapsTE/blob/main/README.md" target="_blank">here</a>.
         </div>
     </div>
 
@@ -255,10 +177,11 @@
             const baseUrl = "https://bc3lc.github.io/mapsTE/mapas_dinamicos/";
 
             if (tipoMapa === 'motorizacion') {
+                
                 if (submapaSeleccionado === 'turismos') {
-                    return `${baseUrl}map_${nivelAdministrativo}_parque_turismos_pc.html`;
+                    return `${baseUrl}map_${nivelAdministrativo}_parque_turismos_pc.html`;              
                 }
-                if (submapaSeleccionado === 'furgonetas') {
+                 if (submapaSeleccionado === 'furgonetas') {
                     return `${baseUrl}map_${nivelAdministrativo}_parque_furgonetas_pc.html`;
                 }
                 if (submapaSeleccionado === 'ciclomotores') {
@@ -282,7 +205,7 @@
                 if (submapaSeleccionado === 'turismos') {
                     return `${baseUrl}map_${nivelAdministrativo}_antiguedad_turismos.html`;
                 }
-                if (submapaSeleccionado === 'furgonetas') {
+                 if (submapaSeleccionado === 'furgonetas') {
                     return `${baseUrl}map_${nivelAdministrativo}_antiguedad_furgonetas.html`;
                 }
                 if (submapaSeleccionado === 'ciclomotores') {
@@ -300,6 +223,7 @@
             }
 
             if (tipoMapa === 'composicion') {
+                 
                 if (submapaSeleccionado === 'turismos') {
                     return `${baseUrl}map_${nivelAdministrativo}_pct_turismos.html`;
                 }
@@ -369,51 +293,79 @@
             cargarMapa(); // Recargar el mapa
         }
 
-        // Función para actualizar la visualización de los submapas según el tipo de mapa
-        function actualizarSubmapa() {
-            const container = document.getElementById("submapaContainer");
-            container.innerHTML = ''; // Limpiar submapas actuales
+        // Función para manejar la selección de un nivel administrativo
+        function actualizarNivel(nivel) {
+            nivelAdministrativo = nivel; // Actualizamos el nivel administrativo
+            actualizarSubmapa(); // Actualizar submapas según el tipo de mapa y nivel
+            cargarMapa(); // Recargar el mapa
+        }
 
-            // Lógica para mostrar submapas dependiendo del tipo de mapa
+        // Actualizar los submapas disponibles según el tipo de mapa seleccionado
+        function actualizarSubmapa() {
+            const submapaContainer = document.getElementById("submapaContainer");
+            submapaContainer.innerHTML = '<h3>Seleccionar Submapa</h3>'; // Reiniciar contenido de submapa
+
             let submapas = [];
+            
+            // Definir los submapas según el tipo de mapa
             if (tipoMapa === 'motorizacion') {
                 submapas = ['turismos', 'furgonetas', 'ciclomotores', 'motocicletas', 'camiones', 'total', 'conductores'];
-            } else if (tipoMapa === 'antiguedad') {
+            }
+            else if (tipoMapa === 'antiguedad') {
                 submapas = ['turismos', 'furgonetas', 'ciclomotores', 'motocicletas', 'camiones', 'total'];
-            } else if (tipoMapa === 'composicion') {
+            }
+            else if (tipoMapa === 'composicion') {
                 submapas = ['turismos', 'furgonetas', 'ciclomotores', 'motocicletas', 'camiones'];
-            } else if (tipoMapa === 'vehiculos') {
+            }
+            else if (tipoMapa === 'vehiculos') {
                 submapas = ['Total (sin ITV)', 'Turismos (sin ITV)', 'Moto. (sin ITV)', 'Turismos (15-25a)', 'Furgo. (15-25a)', 'Camiones (15-25a)'];
-            } else if (tipoMapa === 'distintivos') {
+            }
+            else if (tipoMapa === 'distintivos') {
                 submapas = ['ECO+0', 'eco', '0', 'b', 'c', 'sin'];
             }
 
-            // Crear los botones dinámicamente
+            // Crear los botones de submapas
             submapas.forEach(submapa => {
-                const button = document.createElement('button');
-                button.innerText = submapa;
-                button.onclick = function() {
-                    submapaSeleccionado = submapa;
-                    cargarMapa(); // Cargar el mapa cuando se selecciona un submapa
-                };
-                container.appendChild(button);
+                const btn = document.createElement("button");
+                btn.innerText = `${submapa.charAt(0).toUpperCase() + submapa.slice(1)}`;
+                btn.id = `submapa-${submapa}`;
+                btn.onclick = () => actualizarSubmapaSeleccionado(submapa); // Cada submapa también carga el mapa
+                submapaContainer.appendChild(btn);
             });
         }
 
-        // Función para cambiar el nivel administrativo
-        function actualizarNivel(nivel) {
-            nivelAdministrativo = nivel;
-            cargarMapa(); // Recargar el mapa con el nuevo nivel
+        // Actualizar el submapa seleccionado
+        function actualizarSubmapaSeleccionado(submapa) {
+            submapaSeleccionado = submapa;
+            cargarMapa(); // Recargar el mapa
         }
 
-        // Función para expandir el mapa
+        // Función para expandir el mapa en una nueva pestaña
         function expandirMapa() {
-            const iframe = document.getElementById("mapaFrame");
-            iframe.style.height = "800px"; // Aumentar la altura al expandir
+            let iframe = document.getElementById("mapaFrame");
+            const url = iframe.src;
+            window.open(url, "_blank");
         }
 
-        // Cargar el mapa inicial
-        cargarMapa();
+        // Función para actualizar el estilo de los botones seleccionados
+        function actualizarBotones() {
+            // Restablecer todos los botones
+            document.querySelectorAll('.menu button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Resaltar los botones activos
+            document.getElementById(`mapa-${tipoMapa}`).classList.add('selected');
+            document.getElementById(`nivel-${nivelAdministrativo}`).classList.add('selected');
+            document.getElementById(`submapa-${submapaSeleccionado}`).classList.add('selected');
+        }
+
+        // Cargar mapa inicial al cargar la página
+        window.onload = () => {
+            actualizarSubmapa(); // Cargar submapas según el mapa predeterminado
+            cargarMapa(); // Cargar el mapa inicial
+        };
+
     </script>
 
 </body>
