@@ -23,7 +23,7 @@
     /* Primera barra superior con el título y la descripción */
     .header {
         width: 100%;
-        background: #11302D;
+        background: #034538;
         color: white;
         height: 100px;
         padding: 2px;
@@ -33,7 +33,7 @@
     /* Segunda barra donde están los botones de selección */
     .menu {
         width: 100%;
-        background: #4EBF7B;
+        background: #73D68A;
         height: 100px;
         padding: 2px;
         color: white;
@@ -96,7 +96,7 @@
     .expand {
         font-family: 'Outfit', sans-serif;
         padding: 8px 15px;
-        background: #4EBF7B;
+        background: #73D68A;
         color: white;
         border: none;
         cursor: pointer;
@@ -112,6 +112,65 @@
     .footer-text {
         font-size: 12px;
         color: #333;
+    }
+
+    @media (max-width: 1340px) {
+    
+        .header{
+            height: 100%;
+        }
+        .menu{
+            height: 100%;
+            flex-wrap: nowrap;
+        }
+        .menu button{
+            margin:2px;
+        }
+
+        #submapaContainer button{
+        margin:0;
+        }
+    
+    }
+
+    @media (max-width: 600px) {
+        .header{
+            height: 100%;
+        }
+        .header h2{
+            font-size: 1.2rem;
+        }
+
+        .header p{
+            font-size: 0.9rem;
+        }
+
+        .menu{
+            height: 100%;
+            flex-wrap: nowrap;
+
+        }
+        .menu button{
+            margin: 2px;
+            width: 90%;
+        }
+
+        .menu h3{
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 450px) {
+        .menu{
+            margin-left: 2px;
+            margin-right: 2px;
+        }
+
+        .header{
+            margin-left: 2px;
+            margin-right: 2px; 
+        }
+        
     }
 
 </style>
